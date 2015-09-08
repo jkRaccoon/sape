@@ -1,10 +1,13 @@
 <ion-view view-title="코스">
-	<ion-content>
+	<ion-content class="padding">
 		<div id="map" data-tap-disabled="true" style="width:100%;height:500px"></div>
-		<ion-list>
-			<ion-item href="#/tab/course/detail/0">
-				아하하하하
+		<ion-list  >
+			<div class='item item-divider'>목록</div>			
+			<ion-item href="#/tab/course/detail/{{course.id}}" ng-repeat="course in course">
+				{{course.title}}
 			</ion-item>
 		</ion-list>
+		
+		<button class="button button-block button-positive">+</button>
 	</ion-content>
 </ion-view>

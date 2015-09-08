@@ -1,6 +1,6 @@
 angular.module('starter.controllers', [])
 
-.controller('CourseCtrl', function($scope, $ionicLoading, $compile, $stateParams) {
+.controller('CourseCtrl', function($scope, $ionicLoading, $compile, $stateParams, Course) {
 	
 	function initialize() {
 		var container = document.getElementById('map'); //지도를 담을 영역의 DOM 레퍼런스
@@ -52,11 +52,11 @@ angular.module('starter.controllers', [])
 	if(!$scope.map) {
 		initialize();
 	}
+	$scope.course = Course.all();
 	
     
 }).controller('CourseDetailCtrl', function($scope, Course) {
-	$scope.course = Course.all();
-	console.log($scope.course);
+	
 	
 })
 
