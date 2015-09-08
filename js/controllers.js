@@ -55,7 +55,8 @@ angular.module('starter.controllers', [])
 	
     
 }).controller('CourseDetailCtrl', function($scope, Course) {
-	console.log()
+	$scope.course = Course.all();
+	console.log($scope.course);
 	
 })
 
