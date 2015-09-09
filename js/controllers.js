@@ -1,6 +1,6 @@
 angular.module('starter.controllers', [])
 
-.controller('CourseCtrl', function($scope, $ionicLoading, $compile, $stateParams, Course) {
+.controller('CourseCtrl', function($scope, $ionicLoading, $compile, $stateParams, $ionicPopup,Course) {
 	
 	function initialize() {
 		var container = document.getElementById('map'); //지도를 담을 영역의 DOM 레퍼런스
@@ -46,8 +46,35 @@ angular.module('starter.controllers', [])
 		});
 	};
 	
-	$scope.clickTest = function() {
-		alert('Example of infowindow with ng-click')
+	$scope.openRegForm = function() {
+		//새로운방 생성
+		$scope.data = {}
+
+		// An elaborate, custom popup
+		var myPopup = $ionicPopup.show({
+			template: '<input type="text" ng-model="data.roomTitle">',
+			title: '제목을 입력해주세요',
+			subTitle: '5글자이상 입력하시는것이 좋습니다',
+			scope: $scope,
+			buttons: [
+			          { text: '취소' },
+			          {
+			        	  text: '<b>등록</b>',
+			        	  type: 'button-positive',
+			        	  onTap: function(e) {
+			        		  if (!$scope.data.roomTitle) {			        			 
+			        			  e.preventDefault();
+			        		  } else {
+			        			  return $scope.data.roomTitle;
+			        		  }
+			        	  }
+			          }
+			          ]
+		  });
+		myPopup.then(function(res) {
+			console.log('Tapped!', res);
+		});
+	
 	};
 	if(!$scope.map) {
 		initialize();
