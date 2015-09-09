@@ -14,7 +14,6 @@ angular.module('starter.controllers', [])
 		
 		map.addOverlayMapTypeId(daum.maps.MapTypeId.BICYCLE);
 		
-		
 		daum.maps.event.addListener(map, 'click', function(mouseEvent) {
 		    var latlng = mouseEvent.latLng;
 		   
@@ -65,6 +64,7 @@ angular.module('starter.controllers', [])
 			        		  if (!$scope.data.roomTitle) {			        			 
 			        			  e.preventDefault();
 			        		  } else {
+			        			
 			        			  return $scope.data.roomTitle;
 			        		  }
 			        	  }
