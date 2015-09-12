@@ -168,7 +168,7 @@ angular.module('starter.controllers', [])
 	
 	
 	function mapMoveThisPosition(position){
-		console.log(position);
+		console.log(position.coords);
 		var coods = new daum.maps.LatLng(position.coords.latitude, position.coords.longitude);
 		// 커스텀 오버레이에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
 		var content = "<i class=\"ion-android-bicycle balanced icon-large\" style=\"font-size:200%\"></i>";
@@ -176,7 +176,7 @@ angular.module('starter.controllers', [])
 		
 		var circle = new daum.maps.Circle({
 		    center : coods,  // 원의 중심좌표 입니다 
-		    radius: position.accuracy, // 미터 단위의 원의 반지름입니다 
+		    radius: position.coords.accuracy, // 미터 단위의 원의 반지름입니다 
 		    strokeWeight: 0, // 선의 두께입니다 
 		    strokeColor: '#11c1f3', // 선의 색깔입니다
 		    strokeOpacity: 0, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
@@ -186,7 +186,10 @@ angular.module('starter.controllers', [])
 		});
 		circle.setMap($scope.detailMap); 
 	
-	
+		
+		$scope.speedMeter = (position.coords.speed != null)?position.coords.speed:0;
+		
+		
 				
 		// 커스텀 오버레이를 생성합니다
 		var customOverlay = new daum.maps.CustomOverlay({
