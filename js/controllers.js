@@ -81,51 +81,57 @@ angular.module('starter.controllers', [])
 	if(!$scope.map) {
 		initialize();
 	}
-	$scope.course = Course.all();
 	
-	var route = Course.route();
-	var linePath = new Array();
-	for(var i in route){
-		linePath.push(new daum.maps.LatLng(route[i][1], route[i][0]));
-	}
-	$scope.map.setCenter(linePath[0]);
-	
-	
-	var startCircle = new daum.maps.Circle({
-	    center : linePath[0],  // 원의 중심좌표 입니다 
-	    radius: 50, // 미터 단위의 원의 반지름입니다 
-	    strokeWeight: 2, // 선의 두께입니다 
-	    strokeColor: '#75B8FA', // 선의 색깔입니다
-	    strokeOpacity: 1, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
-	    strokeStyle: 'solid', // 선의 스타일 입니다
-	    fillColor: '#CFE7FF', // 채우기 색깔입니다
-	    fillOpacity: 0.7  // 채우기 불투명도 입니다   
+	Course.route().success(function(result){
+		
+		var linePath = new Array();
+		for(var i in result){
+			linePath.push(new daum.maps.LatLng(result[i]["lat"], result[i]["lng"]));
+		}
+		console.log(linePath)
+		// 지도에 표시할 선을 생성합니다
+		var polyline = new daum.maps.Polyline({
+		    path: linePath, // 선을 구성하는 좌표배열 입니다
+		    strokeWeight: 5, // 선의 두께 입니다
+		    strokeColor: '#0000FF', // 선의 색깔입니다
+		    strokeOpacity: 1, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+		    strokeStyle: 'solid' // 선의 스타일입니다
+		});
+		
+		polyline.setMap($scope.map); 
+		
+		var startCircle = new daum.maps.Circle({
+		    center : linePath[0],  // 원의 중심좌표 입니다 
+		    radius: 50, // 미터 단위의 원의 반지름입니다 
+		    strokeWeight: 2, // 선의 두께입니다 
+		    strokeColor: '#75B8FA', // 선의 색깔입니다
+		    strokeOpacity: 1, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+		    strokeStyle: 'solid', // 선의 스타일 입니다
+		    fillColor: '#CFE7FF', // 채우기 색깔입니다
+		    fillOpacity: 0.7  // 채우기 불투명도 입니다   
+		});
+		
+		startCircle.setMap($scope.map); 
+		
+		var endCircle = new daum.maps.Circle({
+		    center : linePath[linePath.length-1],  // 원의 중심좌표 입니다 
+		    radius: 50, // 미터 단위의 원의 반지름입니다 
+		    strokeWeight: 2, // 선의 두께입니다 
+		    strokeColor: '#FA75B8', // 선의 색깔입니다
+		    strokeOpacity: 1, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+		    strokeStyle: 'solid', // 선의 스타일 입니다
+		    fillColor: '#FFCFE7', // 채우기 색깔입니다
+		    fillOpacity: 0.7  // 채우기 불투명도 입니다   
+		});
+		endCircle.setMap($scope.map); 
+		var coods = new daum.maps.LatLng(result[0]["lat"], result[0]["lng"]);
+		$scope.map.panTo(coods);
+
 	});
 	
-	startCircle.setMap($scope.map); 
 	
-	var endCircle = new daum.maps.Circle({
-	    center : linePath[linePath.length-1],  // 원의 중심좌표 입니다 
-	    radius: 50, // 미터 단위의 원의 반지름입니다 
-	    strokeWeight: 2, // 선의 두께입니다 
-	    strokeColor: '#FA75B8', // 선의 색깔입니다
-	    strokeOpacity: 1, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
-	    strokeStyle: 'solid', // 선의 스타일 입니다
-	    fillColor: '#FFCFE7', // 채우기 색깔입니다
-	    fillOpacity: 0.7  // 채우기 불투명도 입니다   
-	});
-	endCircle.setMap($scope.map); 
 	
-	// 지도에 표시할 선을 생성합니다
-	var polyline = new daum.maps.Polyline({
-	    path: linePath, // 선을 구성하는 좌표배열 입니다
-	    strokeWeight: 5, // 선의 두께 입니다
-	    strokeColor: '#0000FF', // 선의 색깔입니다
-	    strokeOpacity: 1, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
-	    strokeStyle: 'solid' // 선의 스타일입니다
-	});
 	
-	polyline.setMap($scope.map);  
 
     
 }).controller('CourseDetailCtrl', function($scope, Course) {
@@ -156,22 +162,25 @@ angular.module('starter.controllers', [])
 	
 	$scope.watchID =  navigator.geolocation.watchPosition(mapMoveThisPosition);
 	
-	var route = Course.route();
-	var linePath = new Array();
-	for(var i in route){
-		linePath.push(new daum.maps.LatLng(route[i][1], route[i][0]));
-	}
-	// 지도에 표시할 선을 생성합니다
-	var polyline = new daum.maps.Polyline({
-	    path: linePath, // 선을 구성하는 좌표배열 입니다
-	    strokeWeight: 5, // 선의 두께 입니다
-	    strokeColor: '#0000FF', // 선의 색깔입니다
-	    strokeOpacity: 1, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
-	    strokeStyle: 'solid' // 선의 스타일입니다
+	Course.route().success(function(result){
+		console.log(result)
+		var linePath = new Array();
+		for(var i in route){
+			linePath.push(new daum.maps.LatLng(route[i][1], route[i][0]));
+		}
+		// 지도에 표시할 선을 생성합니다
+		var polyline = new daum.maps.Polyline({
+		    path: linePath, // 선을 구성하는 좌표배열 입니다
+		    strokeWeight: 5, // 선의 두께 입니다
+		    strokeColor: '#0000FF', // 선의 색깔입니다
+		    strokeOpacity: 1, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+		    strokeStyle: 'solid' // 선의 스타일입니다
+		});
+		
+		polyline.setMap($scope.detailMap); 
+
 	});
-	
-	polyline.setMap($scope.detailMap); 
-	
+		
 	
 	function mapMoveThisPosition(position){
 		//console.log(position);
