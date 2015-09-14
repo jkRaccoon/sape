@@ -76,7 +76,7 @@ angular.module('starter.services', ['ngResource'])
 	
 	
 	return{
-		all:function(){
+		list:function(){
 			return list;
 		},
 		route:function(){

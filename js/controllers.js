@@ -81,6 +81,7 @@ angular.module('starter.controllers', [])
 	if(!$scope.map) {
 		initialize();
 	}
+	$scope.courseList = Course.list();
 	
 	Course.route().success(function(result){
 		
@@ -88,7 +89,7 @@ angular.module('starter.controllers', [])
 		for(var i in result){
 			linePath.push(new daum.maps.LatLng(result[i]["lat"], result[i]["lng"]));
 		}
-		console.log(linePath)
+		//console.log(linePath)
 		// 지도에 표시할 선을 생성합니다
 		var polyline = new daum.maps.Polyline({
 		    path: linePath, // 선을 구성하는 좌표배열 입니다
