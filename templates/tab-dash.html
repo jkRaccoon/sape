@@ -1,29 +1,13 @@
 <ion-view view-title="SAPE">
   <ion-content class="padding">
-    <div class="list card" >
-      <div class="item item-divider">잠실 - 반포 (21)</div>
-      <a class="item item-body" href="#/tab/course/0">
+    <div class="list card" ng-repeat="routeList in routeList">
+      <div class="item item-divider">{{routeList.title}} ({{routeList.user}})</div>
+      <a class="item item-body" href="#/tab/course/{{routeList.id}}">
         <div>
-        	11.23km - 약 36분
+        	{{routeList.distance}}km - 약 {{routeList.time}}분
         </div>
       </a>
     </div>
-    <div class="list card" >
-      <div class="item item-divider">뚝섬 - 서울숲 (12)</div>
-      <a class="item item-body" href="#/tab/course/1">
-        <div >
-         3.93km - 약 16분
-        </div>
-      </a>
-    </div>
-    <div class="list card">
-      <div class="item item-divider">뚝섬 - 팔당 (5)</div>
-      <a class="item item-body" href="#/tab/course/2">
-        <div>
-	       34.78km - 약 2시간 19분
-          
-        </div>
-      </a>
-    </div>
+    
   </ion-content>
 </ion-view>

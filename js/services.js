@@ -60,10 +60,7 @@ angular.module('starter.services', ['ngResource'])
 	var route;
 	return{
 		list:function(){
-			route = $http.get('http://sape.kr/routeList');
-			
-			
-			return route;
+			return $http.get('http://sape.kr/routeList');			
 		}
 	}
 		

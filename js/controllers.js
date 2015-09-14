@@ -24,7 +24,9 @@ angular.module('starter.controllers', [])
 		
     }
     var courseId = $stateParams.courseId; //코스아이디
-    
+    if($scope.watchID){
+		navigator.geolocation.clearWatch($scope.watchID);
+	}
 	
 	
 	$scope.centerOnMe = function() {
@@ -208,8 +210,11 @@ angular.module('starter.controllers', [])
 })
 
 .controller('DashCtrl', function($scope,Route) {
-	$scope.routeList = Route.list();
-	console.log($scope.routeList)
+	 Route.list().success(function(result){
+		$scope.routeList = result;
+		//console.log($scope.routeList)
+	});
+	
 })
 
 .controller('ChatsCtrl', function($scope, Chats) {
