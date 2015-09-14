@@ -164,10 +164,10 @@ angular.module('starter.controllers', [])
 	$scope.watchID =  navigator.geolocation.watchPosition(mapMoveThisPosition);
 	
 	Course.route().success(function(result){
-		console.log(result)
+		//console.log(result)
 		var linePath = new Array();
-		for(var i in route){
-			linePath.push(new daum.maps.LatLng(route[i][1], route[i][0]));
+		for(var i in result){
+			linePath.push(new daum.maps.LatLng(result[i]["lat"], result[i]["lng"]));
 		}
 		// 지도에 표시할 선을 생성합니다
 		var polyline = new daum.maps.Polyline({
@@ -182,11 +182,11 @@ angular.module('starter.controllers', [])
 
 	});
 		
-	
+	//내위치 표시
 	function mapMoveThisPosition(position){
 		//console.log(position);
 		var coods = new daum.maps.LatLng(position.coords.latitude, position.coords.longitude);
-		// 커스텀 오버레이에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
+		
 		var content = "<i class=\"ion-android-bicycle balanced icon-large\" style=\"font-size:200%\"></i>";
 		
 		if($scope.myPositionCircle) $scope.myPositionCircle.setMap(null);
@@ -215,6 +215,8 @@ angular.module('starter.controllers', [])
 
 
 		$scope.detailMap.panTo(coods);
+		
+		$scope.speedMeter = (position.coords.speed)?position.coords.speed:0;
 	}
 	
 })
