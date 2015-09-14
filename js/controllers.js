@@ -148,7 +148,11 @@ angular.module('starter.controllers', [])
 
 	$scope.detailMap = map;
 	
-	navigator.geolocation.getCurrentPosition(mapMoveThisPosition);
+	if($scope.watchID){
+		navigator.geolocation.clearWatch($scope.watchID);
+	}
+	
+	$scope.watchID =  navigator.geolocation.watchPosition(mapMoveThisPosition);
 	
 	var route = Course.route();
 	var linePath = new Array();
@@ -168,13 +172,15 @@ angular.module('starter.controllers', [])
 	
 	
 	function mapMoveThisPosition(position){
-		console.log(position.coords);
+		//console.log(position);
 		var coods = new daum.maps.LatLng(position.coords.latitude, position.coords.longitude);
 		// 커스텀 오버레이에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
 		var content = "<i class=\"ion-android-bicycle balanced icon-large\" style=\"font-size:200%\"></i>";
 		
+		if($scope.myPositionCircle) $scope.myPositionCircle.setMap(null);
+		if($scope.myPositionIcon) $scope.myPositionIcon.setMap(null);
 		
-		var circle = new daum.maps.Circle({
+		$scope.myPositionCircle = new daum.maps.Circle({
 		    center : coods,  // 원의 중심좌표 입니다 
 		    radius: position.coords.accuracy, // 미터 단위의 원의 반지름입니다 
 		    strokeWeight: 0, // 선의 두께입니다 
@@ -182,29 +188,29 @@ angular.module('starter.controllers', [])
 		    strokeOpacity: 0, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
 		    strokeStyle: 'solid', // 선의 스타일 입니다
 		    fillColor: '#FFCFE7', // 채우기 색깔입니다
-		    fillOpacity: 0.5  // 채우기 불투명도 입니다   
+		    fillOpacity: 0.5,  // 채우기 불투명도 입니다   
+		    map:$scope.detailMap
 		});
-		circle.setMap($scope.detailMap); 
-	
-		
-		$scope.speedMeter = (position.coords.speed != null)?position.coords.speed:0;
-		
-		
+
 				
 		// 커스텀 오버레이를 생성합니다
-		var customOverlay = new daum.maps.CustomOverlay({
+		$scope.myPositionIcon = new daum.maps.CustomOverlay({
 		    map: $scope.detailMap,
 		    position: coods,
 		    content: content,
 		    yAnchor: 0.5 
 		});
 
-		$scope.detailMap.setCenter(coods);
+
+		$scope.detailMap.panTo(coods);
 	}
 	
 })
 
-.controller('DashCtrl', function($scope) {})
+.controller('DashCtrl', function($scope,Route) {
+	$scope.routeList = Route.list();
+	console.log($scope.routeList)
+})
 
 .controller('ChatsCtrl', function($scope, Chats) {
   // With the new view caching in Ionic, Controllers are only called

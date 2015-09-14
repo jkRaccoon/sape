@@ -1,4 +1,4 @@
-angular.module('starter.services', [])
+angular.module('starter.services', ['ngResource'])
 
 .factory('Chats', function() {
   // Might use a resource here that returns a JSON array
@@ -56,6 +56,17 @@ angular.module('starter.services', [])
       return null;
     }
   };
+}).factory('Route',function($http){
+	var route;
+	return{
+		list:function(){
+			route = $http.get('http://sape.kr/routeList');
+			
+			
+			return route;
+		}
+	}
+		
 }).factory('Course',function(){
 	var list = [{
 		id:0,
