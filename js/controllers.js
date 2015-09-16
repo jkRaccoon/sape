@@ -1,5 +1,6 @@
 angular.module('starter.controllers', [])
 
+//코스 상세보기
 .controller('CourseCtrl', function($scope, $ionicLoading, $compile, $stateParams, $ionicPopup,Course) {
 	
 	function initialize() {
@@ -27,10 +28,7 @@ angular.module('starter.controllers', [])
    
     var courseId = $stateParams.courseId; //코스아이디
     
-    if($scope.watchID){
-		navigator.geolocation.clearWatch($scope.watchID);
-	}
-	
+    
 	
 	
 	
@@ -127,14 +125,14 @@ angular.module('starter.controllers', [])
 
 	});
 	
-	
-	
-	
 
-    
-}).controller('CourseDetailCtrl', function($scope, Course) {
+})
+//라이딩 상세보기
+.controller('CourseDetailCtrl', function($scope, Course) {
 	
-	
+	$scope.$on("$destroy", function handler() {		
+		navigator.geolocation.clearWatch($scope.watchID);		
+    });
 	
 	var container = document.getElementById('detailmap'); //지도를 담을 영역의 DOM 레퍼런스
 	var options = { //지도를 생성할 때 필요한 기본 옵션
@@ -154,11 +152,9 @@ angular.module('starter.controllers', [])
 
 	$scope.detailMap = map;
 	
-	if($scope.watchID){
-		navigator.geolocation.clearWatch($scope.watchID);
-	}
 	
-	$scope.watchID =  navigator.geolocation.watchPosition(mapMoveThisPosition);
+	
+	
 	
 	Course.route().success(function(result){
 		
@@ -180,8 +176,8 @@ angular.module('starter.controllers', [])
 	});
 		
 	//내위치 표시
-	function mapMoveThisPosition(position){
-		
+	$scope.mapMoveThisPosition = function(position){
+		console.log(position)
 		var coods = new daum.maps.LatLng(position.coords.latitude, position.coords.longitude);
 		
 		var content = "<i class=\"ion-android-bicycle balanced icon-large\" style=\"font-size:200%\"></i>";
@@ -217,6 +213,8 @@ angular.module('starter.controllers', [])
 		$scope.lat = position.coords.latitude;
 		$scope.lng = position.coords.longitude;
 	}
+	
+	$scope.watchID =  navigator.geolocation.watchPosition($scope.mapMoveThisPosition);
 	
 })
 
