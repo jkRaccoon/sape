@@ -16,10 +16,28 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
       cordova.plugins.Keyboard.disableScroll(true);
 
     }
+    
     if (window.StatusBar) {
       // org.apache.cordova.statusbar required
+      
       StatusBar.styleLightContent();
     }
+    
+    var token = localStorage.getItem('token');
+	
+	if(window.cordova){
+		if(!token){
+			document.addEventListener("deviceready", function () {
+				localStorage.setItem('token',device.uuid);
+	        }, false);	
+		}
+		
+	}else{
+		
+		localStorage.setItem('token','abcdefg-ABCDEFG-1234567-7654321');
+	}
+	
+	
   });
 })
 
@@ -100,5 +118,10 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
 
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/tab/dash');
-
+  
+  
+  
 });
+   
+  
+ 

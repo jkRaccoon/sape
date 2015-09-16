@@ -57,10 +57,6 @@ angular.module('starter.services', ['ngResource'])
     }
   };
 }).factory('Course',function($http){
-	
-	
-	
-	
 	return{
 		list:function(){
 			
@@ -71,16 +67,22 @@ angular.module('starter.services', ['ngResource'])
 			
 			return $http.get('http://sape.kr/routeDetail?routeIdx='+courseId);
 		},
-		routeLiveList:function(){
-			var list = [{
-				id:0,
-				title:'으아닛'
-			},{
-				id:1,
-				title:'아 달려보자고'
-			}];
+		routeLiveList:function(courseId){
+						
+			return $http.get('http://sape.kr/routeLiveList?routeIdx='+courseId);
 			
-			return list;
+			
+		}
+	}
+}).factory('myInfo',function($http){
+	
+	
+	
+	
+	return {
+		token:function(){
+			return localStorage.getItem('token');
 		}
 	}
 });
+

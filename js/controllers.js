@@ -23,6 +23,8 @@ angular.module('starter.controllers', [])
 		
 		
     }
+    
+   
     var courseId = $stateParams.courseId; //코스아이디
     
     if($scope.watchID){
@@ -30,23 +32,7 @@ angular.module('starter.controllers', [])
 	}
 	
 	
-	$scope.centerOnMe = function() {
-		if(!$scope.map) {
-			return;
-		}
-		
-		$scope.loading = $ionicLoading.show({
-			content: 'Getting current location...',
-			showBackdrop: false
-		});
-		
-		navigator.geolocation.getCurrentPosition(function(pos) {
-			$scope.map.setCenter(new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude));
-			$scope.loading.hide();
-		}, function(error) {
-			alert('Unable to get location: ' + error.message);
-		});
-	};
+	
 	
 	$scope.openRegForm = function() {
 		//새로운방 생성
@@ -75,14 +61,20 @@ angular.module('starter.controllers', [])
 			          ]
 		  });
 		myPopup.then(function(res) {
-			console.log('Tapped!', res);
+			
 		});
 	
 	};
 	if(!$scope.map) {
 		initialize();
 	}
-	$scope.courseList = Course.routeLiveList();
+	
+	
+	Course.routeLiveList(courseId).success(function(result){
+		$scope.courseList = result;
+	});
+	
+	
 	Course.route(courseId).success(function(result){
 		
 		var linePath = new Array();
@@ -94,7 +86,7 @@ angular.module('starter.controllers', [])
 			linePath.push(point);
 			bounds.extend(point);
 		}
-		//console.log(linePath)
+		
 		// 지도에 표시할 선을 생성합니다
 		var polyline = new daum.maps.Polyline({
 		    path: linePath, // 선을 구성하는 좌표배열 입니다
@@ -104,7 +96,7 @@ angular.module('starter.controllers', [])
 		    strokeStyle: 'solid' // 선의 스타일입니다
 		});
 		
-		polyline.setMap($scope.map); 
+		
 		
 		var startCircle = new daum.maps.Circle({
 		    center : linePath[0],  // 원의 중심좌표 입니다 
@@ -130,7 +122,7 @@ angular.module('starter.controllers', [])
 		    fillOpacity: 0.7  // 채우기 불투명도 입니다   
 		});
 		endCircle.setMap($scope.map); 
-		
+		polyline.setMap($scope.map); 
 		$scope.map.setBounds(bounds,10,10,10,10);
 
 	});
@@ -169,7 +161,7 @@ angular.module('starter.controllers', [])
 	$scope.watchID =  navigator.geolocation.watchPosition(mapMoveThisPosition);
 	
 	Course.route().success(function(result){
-		//console.log(result)
+		
 		var linePath = new Array();
 		for(var i in result){
 			linePath.push(new daum.maps.LatLng(result[i]["lat"], result[i]["lng"]));
@@ -189,7 +181,7 @@ angular.module('starter.controllers', [])
 		
 	//내위치 표시
 	function mapMoveThisPosition(position){
-		//console.log(position);
+		
 		var coods = new daum.maps.LatLng(position.coords.latitude, position.coords.longitude);
 		
 		var content = "<i class=\"ion-android-bicycle balanced icon-large\" style=\"font-size:200%\"></i>";
@@ -222,15 +214,20 @@ angular.module('starter.controllers', [])
 		$scope.detailMap.panTo(coods);
 		
 		$scope.speedMeter = (position.coords.speed)?position.coords.speed:0;
+		$scope.lat = position.coords.latitude;
+		$scope.lng = position.coords.longitude;
 	}
 	
 })
 
-.controller('DashCtrl', function($scope,Course) {
-	 Course.list().success(function(result){
+.controller('DashCtrl', function($scope,Course,myInfo) {
+	Course.list().success(function(result){
 		$scope.routeList = result;
-		console.log($scope.routeList)
+		
 	});
+	
+	$scope.uuid = myInfo.token();
+	
 	
 })
 
