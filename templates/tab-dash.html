@@ -2,7 +2,7 @@
   <ion-content class="padding">
     <div class="list card" ng-repeat="routeList in routeList">
       <div class="item item-divider">{{routeList.title}} ({{routeList.user}})</div>
-      <a class="item item-body" href="#/tab/course/{{routeList.id}}">
+      <a class="item item-body" href="#/tab/course/{{routeList.idx}}">
         <div>
         	{{routeList.distance}}km - 약 {{routeList.time}}분
         </div>

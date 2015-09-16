@@ -24,6 +24,7 @@ angular.module('starter.controllers', [])
 		
     }
     var courseId = $stateParams.courseId; //코스아이디
+    
     if($scope.watchID){
 		navigator.geolocation.clearWatch($scope.watchID);
 	}
@@ -81,13 +82,17 @@ angular.module('starter.controllers', [])
 	if(!$scope.map) {
 		initialize();
 	}
-	$scope.courseList = Course.list();
-	
-	Course.route().success(function(result){
+	$scope.courseList = Course.routeLiveList();
+	Course.route(courseId).success(function(result){
 		
 		var linePath = new Array();
+		var bounds = new daum.maps.LatLngBounds();
+		var point = null;
+		
 		for(var i in result){
-			linePath.push(new daum.maps.LatLng(result[i]["lat"], result[i]["lng"]));
+			point = new daum.maps.LatLng(result[i]["lat"], result[i]["lng"]);
+			linePath.push(point);
+			bounds.extend(point);
 		}
 		//console.log(linePath)
 		// 지도에 표시할 선을 생성합니다
@@ -125,8 +130,8 @@ angular.module('starter.controllers', [])
 		    fillOpacity: 0.7  // 채우기 불투명도 입니다   
 		});
 		endCircle.setMap($scope.map); 
-		var coods = new daum.maps.LatLng(result[0]["lat"], result[0]["lng"]);
-		$scope.map.panTo(coods);
+		
+		$scope.map.setBounds(bounds,10,10,10,10);
 
 	});
 	
@@ -221,10 +226,10 @@ angular.module('starter.controllers', [])
 	
 })
 
-.controller('DashCtrl', function($scope,Route) {
-	 Route.list().success(function(result){
+.controller('DashCtrl', function($scope,Course) {
+	 Course.list().success(function(result){
 		$scope.routeList = result;
-		//console.log($scope.routeList)
+		console.log($scope.routeList)
 	});
 	
 })

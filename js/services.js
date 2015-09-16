@@ -56,33 +56,31 @@ angular.module('starter.services', ['ngResource'])
       return null;
     }
   };
-}).factory('Route',function($http){
-	var route;
-	return{
-		list:function(){
-			return $http.get('http://sape.kr/routeList');			
-		}
-	}
-		
 }).factory('Course',function($http){
-	var list = [{
-		id:0,
-		title:'으아닛'
-	},{
-		id:1,
-		title:'아 달려보자고'
-	}];
+	
 	
 	
 	
 	return{
 		list:function(){
-			return list;
+			
+			return $http.get('http://sape.kr/routeList');			
 		},
-		route:function(){
+		route:function(courseId){
 			
 			
-			return $http.get('http://sape.kr/routeDetail');
+			return $http.get('http://sape.kr/routeDetail?routeIdx='+courseId);
+		},
+		routeLiveList:function(){
+			var list = [{
+				id:0,
+				title:'으아닛'
+			},{
+				id:1,
+				title:'아 달려보자고'
+			}];
+			
+			return list;
 		}
 	}
 });
