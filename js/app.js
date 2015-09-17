@@ -5,9 +5,9 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
+angular.module('starter', ['ionic', 'starter.controllers', 'starter.services','ngResource'])
 
-.run(function($ionicPlatform) {
+.run(function($ionicPlatform,$http) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -28,15 +28,33 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
 	if(window.cordova){
 		if(!token){
 			document.addEventListener("deviceready", function () {
-				localStorage.setItem('token',device.uuid);
+				localStorage.setItem('token',device.uuid+makeid());
 	        }, false);	
 		}
 		
 	}else{
-		
-		localStorage.setItem('token','abcdefg-ABCDEFG-1234567-7654321');
+		if(!token){
+			localStorage.setItem('token','abcdefg-ABCDEFG-1234567-7654321'+makeid());
+			
+		}
 	}
 	
+	var data = $http.post('http://sape.kr/member/join',{token:localStorage.getItem('token')});
+	data.success(function(result){
+		console.log(result);
+	});
+		
+	
+	function makeid()
+	{
+	    var text = "";
+	    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+	
+	    for( var i=0; i < 5; i++ )
+	        text += possible.charAt(Math.floor(Math.random() * possible.length));
+	
+	    return text;
+	}
 	
   });
 })
