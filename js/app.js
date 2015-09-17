@@ -39,7 +39,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services','n
 		}
 	}
 	
-	var data = $http.post('http://sape.kr/member/join',{token:localStorage.getItem('token')});
+	var data = $http.post('http://sape.kr/member/join',{data:{token:localStorage.getItem('token')}});
 	data.success(function(result){
 		console.log(result);
 	});
