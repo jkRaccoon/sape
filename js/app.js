@@ -39,10 +39,10 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services','n
 		}
 	}
 	
-	var data = $http.post('http://sape.kr/member/join',{data:{token:localStorage.getItem('token')}});
-	data.success(function(result){
-		console.log(result);
-	});
+	
+	
+	
+	
 		
 	
 	function makeid()

@@ -218,14 +218,23 @@ angular.module('starter.controllers', [])
 	
 })
 
-.controller('DashCtrl', function($scope,Course,myInfo) {
+.controller('DashCtrl', function($scope,$http,Course,myInfo) {
 	Course.list().success(function(result){
 		$scope.routeList = result;
 		
 	});
 	
 	$scope.uuid = myInfo.token();
+	var req = {
+		method : "POST",
+		url: "http://sape.kr/member/join",
+		headers:{'Content-Type':"multipart/form-data"},
+		data : {"token":localStorage.getItem('token')}
+	};
 	
+	$http(req).then(function(result){
+		console.log(result.data);
+	});
 	
 })
 
