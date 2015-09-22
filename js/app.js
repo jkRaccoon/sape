@@ -7,7 +7,7 @@
 // 'starter.controllers' is found in controllers.js
 angular.module('starter', ['ionic', 'starter.controllers', 'starter.services','ngResource'])
 
-.run(function($ionicPlatform,$http) {
+.run(function($ionicPlatform,$http,$httpParamSerializerJQLike) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -41,7 +41,12 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services','n
 	
 	
 	
+	var httpOption = {headers:{'Content-Type':"application/x-www-form-urlencoded"}};
+	var httpRequest  = {token:localStorage.getItem('token')};
 	
+	$http.post("http://sape.kr/member/join",$httpParamSerializerJQLike(httpRequest),httpOption).then(function(result){
+		console.log(result.data);
+	});
 	
 		
 	
