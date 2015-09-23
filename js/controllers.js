@@ -128,33 +128,24 @@ angular.module('starter.controllers', [])
 
 })
 //라이딩 상세보기
-.controller('CourseDetailCtrl', function($scope, Course) {
-	
+.controller('CourseDetailCtrl', function($scope, $stateParams, Course) {
+	//디스트로이 이벤트 (와치이벤트해제)
 	$scope.$on("$destroy", function handler() {		
-		navigator.geolocation.clearWatch($scope.watchID);		
+		if($scope.watchID)navigator.geolocation.clearWatch($scope.watchID);		
     });
-	
+	var courseDetailId = $stateParams.courseDetailId;
+	//지도 추가 
 	var container = document.getElementById('detailmap'); //지도를 담을 영역의 DOM 레퍼런스
 	var options = { //지도를 생성할 때 필요한 기본 옵션
 		center: new daum.maps.LatLng(37.51186511, 126.99830338718), //지도의 중심좌표.
 		level: 3, //지도의 레벨(확대, 축소 정도)
-		
 	};
 	
 	var map = new daum.maps.Map(container, options); //지도 생성 및 객체 리턴
-	
-	map.addOverlayMapTypeId(daum.maps.MapTypeId.BICYCLE);
-	
-	daum.maps.event.addListener(map, 'click', function(mouseEvent) {
-	    var latlng = mouseEvent.latLng;
-	   
-	});
-
+	map.addOverlayMapTypeId(daum.maps.MapTypeId.BICYCLE); //자전거 범례추가
 	$scope.detailMap = map;
 	
-	
-	
-	
+	//코스정보 표시.
 	
 	Course.route().success(function(result){
 		
@@ -174,49 +165,59 @@ angular.module('starter.controllers', [])
 		polyline.setMap($scope.detailMap); 
 
 	});
+	
+	//내위치를 표시할 마커 생성.
+	$scope.myPositionIcon = new daum.maps.CustomOverlay({
+	    map: $scope.detailMap,
+	    position: new daum.maps.LatLng(37.51186511, 126.99830338718),
+	    content: "<i class=\"ion-android-bicycle balanced icon-large\" style=\"font-size:200%\"></i>",
+	    yAnchor: 0.5 
+	});
+	
+	//정확도 서클 생성
+	$scope.myPositionCircle = new daum.maps.Circle({
+	    center : new daum.maps.LatLng(37.51186511, 126.99830338718),  // 원의 중심좌표 입니다 
+	    radius: 10, // 미터 단위의 원의 반지름입니다 
+	    strokeWeight: 0, // 선의 두께입니다 
+	    strokeColor: '#11c1f3', // 선의 색깔입니다
+	    strokeOpacity: 0, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+	    strokeStyle: 'solid', // 선의 스타일 입니다
+	    fillColor: '#FFCFE7', // 채우기 색깔입니다
+	    fillOpacity: 0.5,  // 채우기 불투명도 입니다   
+	    map:$scope.detailMap
+	});
 		
 	//내위치 표시
 	$scope.mapMoveThisPosition = function(position){
-		console.log(position)
+		//console.log(position)
 		var coods = new daum.maps.LatLng(position.coords.latitude, position.coords.longitude);
-		
-		var content = "<i class=\"ion-android-bicycle balanced icon-large\" style=\"font-size:200%\"></i>";
-		
-		if($scope.myPositionCircle) $scope.myPositionCircle.setMap(null);
-		if($scope.myPositionIcon) $scope.myPositionIcon.setMap(null);
-		
-		$scope.myPositionCircle = new daum.maps.Circle({
-		    center : coods,  // 원의 중심좌표 입니다 
-		    radius: position.coords.accuracy, // 미터 단위의 원의 반지름입니다 
-		    strokeWeight: 0, // 선의 두께입니다 
-		    strokeColor: '#11c1f3', // 선의 색깔입니다
-		    strokeOpacity: 0, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
-		    strokeStyle: 'solid', // 선의 스타일 입니다
-		    fillColor: '#FFCFE7', // 채우기 색깔입니다
-		    fillOpacity: 0.5,  // 채우기 불투명도 입니다   
-		    map:$scope.detailMap
-		});
-
+		var accuracy = position.coords.accuracy;
 				
-		// 커스텀 오버레이를 생성합니다
-		$scope.myPositionIcon = new daum.maps.CustomOverlay({
-		    map: $scope.detailMap,
-		    position: coods,
-		    content: content,
-		    yAnchor: 0.5 
-		});
-
-
+		
+		
+		
+		//아이콘 위치 수정
+		$scope.myPositionIcon.setPosition(coods);
+		$scope.myPositionCircle.setPosition(coods);		
+		
+		//정확도 원 크기 조정
+		$scope.myPositionCircle.setRadius(accuracy);
+		
+		//지도 중심좌표이동
 		$scope.detailMap.panTo(coods);
 		
+		//속도표시
 		$scope.speedMeter = (position.coords.speed)?position.coords.speed:0;
+		
+		//경위도표시
 		$scope.lat = position.coords.latitude;
 		$scope.lng = position.coords.longitude;
+		Course.updateMyPosition(position,courseDetailId);
 	}
 	
 	$scope.watchID =  navigator.geolocation.watchPosition($scope.mapMoveThisPosition);
-	
 })
+	
 
 .controller('DashCtrl', function($scope,$http,$httpParamSerializerJQLike,Course,myInfo) {
 	Course.list().success(function(result){
@@ -230,27 +231,19 @@ angular.module('starter.controllers', [])
 })
 
 .controller('ChatsCtrl', function($scope, Chats) {
-  // With the new view caching in Ionic, Controllers are only called
-  // when they are recreated or on app start, instead of every page change.
-  // To listen for when this page is active (for example, to refresh data),
-  // listen for the $ionicView.enter event:
-  //
-  //$scope.$on('$ionicView.enter', function(e) {
-  //});
-
-  $scope.chats = Chats.all();
-  $scope.remove = function(chat) {
-    Chats.remove(chat);
-  };
+	$scope.chats = Chats.all();
+	$scope.remove = function(chat) {
+		Chats.remove(chat);
+	};
 })
 
 .controller('ChatDetailCtrl', function($scope, $stateParams, Chats) {
-  $scope.chat = Chats.get($stateParams.chatId);
+	$scope.chat = Chats.get($stateParams.chatId);
 })
 
 .controller('AccountCtrl', function($scope) {
-  $scope.settings = {
-    enableGps: true,
-    enableDailyRecommend : true
-  };
+	$scope.settings = {
+		enableGps: true,
+		enableDailyRecommend : true
+	};
 });

@@ -56,7 +56,7 @@ angular.module('starter.services', ['ngResource'])
       return null;
     }
   };
-}).factory('Course',function($http){
+}).factory('Course',function($http,$httpParamSerializerJQLike){
 	return{
 		list:function(){
 			
@@ -68,9 +68,23 @@ angular.module('starter.services', ['ngResource'])
 			return $http.get('http://sape.kr/routeDetail?routeIdx='+courseId);
 		},
 		routeLiveList:function(courseId){
-						
 			return $http.get('http://sape.kr/routeLiveList?routeIdx='+courseId);
-			
+		},
+		updateMyPosition:function(position,courseDetailId){
+			var httpOption = {headers:{'Content-Type':"application/x-www-form-urlencoded"}};
+			var httpRequest  = {
+				token:localStorage.getItem('token'),
+				latitude : position.coords.latitude,
+				longitude:position.coords.longitude,
+				accuracy:position.coords.accuracy,
+				speed:position.coords.speed,
+				heading:position.coords.heading,
+				altitude:position.coords.altitude,
+				altitudeAccuracy:position.coords.altitudeAccuracy,
+				timestamp:position.timestamp,
+				courseDetailId : courseDetailId
+			};
+			return $http.post("http://sape.kr/member/position",$httpParamSerializerJQLike(httpRequest),httpOption);
 			
 		}
 	}

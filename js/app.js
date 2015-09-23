@@ -27,26 +27,30 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services','n
 	
 	if(window.cordova){
 		if(!token){
-			document.addEventListener("deviceready", function () {
-				localStorage.setItem('token',device.uuid+makeid());
-	        }, false);	
+			localStorage.setItem('token',device.uuid+makeid());
+			var httpOption = {headers:{'Content-Type':"application/x-www-form-urlencoded"}};
+			var httpRequest  = {token:localStorage.getItem('token')};
+			
+			$http.post("http://sape.kr/member/join",$httpParamSerializerJQLike(httpRequest),httpOption).then(function(result){
+				console.log(result.data);
+			});	
 		}
 		
 	}else{
 		if(!token){
 			localStorage.setItem('token','abcdefg-ABCDEFG-1234567-7654321'+makeid());
+			var httpOption = {headers:{'Content-Type':"application/x-www-form-urlencoded"}};
+			var httpRequest  = {token:localStorage.getItem('token')};
 			
+			$http.post("http://sape.kr/member/join",$httpParamSerializerJQLike(httpRequest),httpOption).then(function(result){
+				console.log(result.data);
+			});
 		}
 	}
 	
 	
 	
-	var httpOption = {headers:{'Content-Type':"application/x-www-form-urlencoded"}};
-	var httpRequest  = {token:localStorage.getItem('token')};
 	
-	$http.post("http://sape.kr/member/join",$httpParamSerializerJQLike(httpRequest),httpOption).then(function(result){
-		console.log(result.data);
-	});
 	
 		
 	
