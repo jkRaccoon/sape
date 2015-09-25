@@ -56,7 +56,7 @@ angular.module('starter.services', ['ngResource'])
       return null;
     }
   };
-}).factory('Course',function($http,$httpParamSerializerJQLike){
+}).factory('Course',function($http){
 	return{
 		list:function(){
 			
@@ -71,7 +71,7 @@ angular.module('starter.services', ['ngResource'])
 			return $http.get('http://sape.kr/routeLiveList?routeIdx='+courseId);
 		},
 		updateMyPosition:function(position,courseDetailId){
-			var httpOption = {headers:{'Content-Type':"application/x-www-form-urlencoded"}};
+			
 			var httpRequest  = {
 				token:localStorage.getItem('token'),
 				latitude : position.coords.latitude,
@@ -84,8 +84,37 @@ angular.module('starter.services', ['ngResource'])
 				timestamp:position.timestamp,
 				courseDetailId : courseDetailId
 			};
-			return $http.post("http://sape.kr/member/position",$httpParamSerializerJQLike(httpRequest),httpOption);
+			return $http.put("http://sape.kr/riding/"+courseDetailId,httpRequest);
 			
+		}
+	}
+}).factory('ride',function($http){
+	return{
+		route:function(courseId){
+			return $http.get('http://sape.kr/routeDetail?routeIdx='+courseId);
+		},
+		put:function(position,courseDetailId){
+			
+			var httpRequest  = {
+				token:localStorage.getItem('token'),
+				latitude : position.coords.latitude,
+				longitude:position.coords.longitude,
+				accuracy:position.coords.accuracy,
+				speed:position.coords.speed,
+				heading:position.coords.heading,
+				altitude:position.coords.altitude,
+				altitudeAccuracy:position.coords.altitudeAccuracy,
+				timestamp:position.timestamp,
+				courseDetailId : courseDetailId
+			};
+			return $http.put("http://sape.kr/riding/"+courseDetailId,httpRequest);
+			
+		},
+		get:function(rideId){
+			var httpRequest  = {
+				token:localStorage.getItem('token')
+			};
+			return $http.get("http://sape.kr/riding/"+rideId,httpRequest);
 		}
 	}
 }).factory('myInfo',function($http){

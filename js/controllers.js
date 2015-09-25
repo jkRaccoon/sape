@@ -128,10 +128,11 @@ angular.module('starter.controllers', [])
 
 })
 //라이딩 상세보기
-.controller('CourseDetailCtrl', function($scope, $stateParams, Course) {
+.controller('CourseDetailCtrl', function($scope, $stateParams, ride) {
 	//디스트로이 이벤트 (와치이벤트해제)
 	$scope.$on("$destroy", function handler() {		
-		if($scope.watchID)navigator.geolocation.clearWatch($scope.watchID);		
+		if($scope.watchID)navigator.geolocation.clearWatch($scope.watchID);
+		if($scope.displayTimerID)clearInterval($scope.displayTimerID);		
     });
 	var courseDetailId = $stateParams.courseDetailId;
 	//지도 추가 
@@ -147,7 +148,7 @@ angular.module('starter.controllers', [])
 	
 	//코스정보 표시.
 	
-	Course.route().success(function(result){
+	ride.route().success(function(result){
 		
 		var linePath = new Array();
 		for(var i in result){
@@ -212,10 +213,27 @@ angular.module('starter.controllers', [])
 		//경위도표시
 		$scope.lat = position.coords.latitude;
 		$scope.lng = position.coords.longitude;
-		Course.updateMyPosition(position,courseDetailId);
+		ride.put(position,courseDetailId);
+	}
+	
+	$scope.displayTimer = function(){
+		ride.get(courseDetailId).then(function(result){
+			
+			for(var i in result.data){
+				console.log(result.data[i])
+				new daum.maps.CustomOverlay({
+				    map: $scope.detailMap,
+				    position: new daum.maps.LatLng(result.data[i].latitude, result.data[i].longitude),
+				    content: "<i class=\"ion-android-bicycle balanced icon-large\" style=\"font-size:200%\"></i>",
+				    yAnchor: 0.5 
+				});
+				
+			}
+		});
 	}
 	
 	$scope.watchID =  navigator.geolocation.watchPosition($scope.mapMoveThisPosition);
+	$scope.displayTimerID = setInterval($scope.displayTimer, 1000);
 })
 	
 
