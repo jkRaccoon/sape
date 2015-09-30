@@ -84,8 +84,14 @@ angular.module('starter.services', ['ngResource'])
 				timestamp:position.timestamp,
 				courseDetailId : courseDetailId
 			};
-			return $http.put("http://sape.kr/riding/"+courseDetailId,httpRequest);
+			return $http.post("http://sape.kr/riding/"+courseDetailId,httpRequest);
 			
+		},
+		joinRide:function(courseDetailId){
+			var httpRequest  = {
+				token:localStorage.getItem('token')
+			};
+			return $http.put("http://sape.kr/riding/"+courseDetailId,httpRequest);
 		}
 	}
 }).factory('ride',function($http){
@@ -93,7 +99,7 @@ angular.module('starter.services', ['ngResource'])
 		route:function(courseId){
 			return $http.get('http://sape.kr/routeDetail?routeIdx='+courseId);
 		},
-		put:function(position,courseDetailId){
+		post:function(position,courseDetailId){
 			
 			var httpRequest  = {
 				token:localStorage.getItem('token'),
@@ -107,14 +113,25 @@ angular.module('starter.services', ['ngResource'])
 				timestamp:position.timestamp,
 				courseDetailId : courseDetailId
 			};
-			return $http.put("http://sape.kr/riding/"+courseDetailId,httpRequest);
+			return $http.post("http://sape.kr/riding/"+courseDetailId,httpRequest);
 			
 		},
 		get:function(rideId){
+			var token=localStorage.getItem('token');
+			return $http.get("http://sape.kr/riding/"+rideId+"?token="+token);
+		},
+		put:function(courseDetailId){
 			var httpRequest  = {
 				token:localStorage.getItem('token')
 			};
-			return $http.get("http://sape.kr/riding/"+rideId,httpRequest);
+			return $http.put("http://sape.kr/riding/"+courseDetailId,httpRequest);
+		},
+		delete:function(courseDetailId){
+			var httpRequest  = {
+				token:localStorage.getItem('token')
+			};
+			console.log(httpRequest)
+			return $http.delete("http://sape.kr/riding/"+courseDetailId,httpRequest);
 		}
 	}
 }).factory('myInfo',function($http){

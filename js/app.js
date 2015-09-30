@@ -20,7 +20,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services','n
     if (window.StatusBar) {
       // org.apache.cordova.statusbar required
       
-      StatusBar.styleLightContent();
+      //StatusBar.styleLightContent();
     }
     
     var token = localStorage.getItem('token');
@@ -32,7 +32,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services','n
 			var httpRequest  = {token:localStorage.getItem('token')};
 			
 			$http.post("http://sape.kr/member/join",$httpParamSerializerJQLike(httpRequest),httpOption).then(function(result){
-				console.log(result.data);
+				//console.log(result.data);
 			});	
 		}
 		
@@ -43,7 +43,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services','n
 			var httpRequest  = {token:localStorage.getItem('token')};
 			
 			$http.post("http://sape.kr/member/join",$httpParamSerializerJQLike(httpRequest),httpOption).then(function(result){
-				console.log(result.data);
+				//console.log(result.data);
 			});
 		}
 	}

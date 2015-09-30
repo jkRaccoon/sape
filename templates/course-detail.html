@@ -10,13 +10,10 @@
 				<div  style="text-align: center"><i class="ion-ios-speedometer-outline"></i> {{speedMeter}}</span> Km</div>
 			</div>
 			<p>참가 신청을하면, 참가중인 다른사람의 위치를 볼수있음과 동시에 본인의 위치도 다른사람이 볼 수 있게 됩니다.</p>
-			<button class="button button-outline button-positive">참여하기</button>
+			<button class="button button-outline button-positive" ng-click="joinRide()">참여하기</button>
 			<button class="button button-outline button-positive">참가취소</button>
 
 		</div>
-		<div class='padding'>
-			<div>{{lat}}</div>
-			<div>{{lng}}</div>
-		</div>	
+		
 	</ion-content>
 </ion-view>

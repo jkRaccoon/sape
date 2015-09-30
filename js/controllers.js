@@ -129,12 +129,14 @@ angular.module('starter.controllers', [])
 })
 //라이딩 상세보기
 .controller('CourseDetailCtrl', function($scope, $stateParams, ride) {
+	$scope.courseDetailId = $stateParams.courseDetailId;
 	//디스트로이 이벤트 (와치이벤트해제)
 	$scope.$on("$destroy", function handler() {		
 		if($scope.watchID)navigator.geolocation.clearWatch($scope.watchID);
-		if($scope.displayTimerID)clearInterval($scope.displayTimerID);		
+		if($scope.displayTimerID)clearInterval($scope.displayTimerID);
+		ride.delete($scope.courseDetailId);		
     });
-	var courseDetailId = $stateParams.courseDetailId;
+	
 	//지도 추가 
 	var container = document.getElementById('detailmap'); //지도를 담을 영역의 DOM 레퍼런스
 	var options = { //지도를 생성할 때 필요한 기본 옵션
@@ -171,7 +173,7 @@ angular.module('starter.controllers', [])
 	$scope.myPositionIcon = new daum.maps.CustomOverlay({
 	    map: $scope.detailMap,
 	    position: new daum.maps.LatLng(37.51186511, 126.99830338718),
-	    content: "<i class=\"ion-android-bicycle balanced icon-large\" style=\"font-size:200%\"></i>",
+	    content: "<i class=\"ion-android-bicycle positive  icon-large\" style=\"font-size:200%\"></i>",
 	    yAnchor: 0.5 
 	});
 	
@@ -213,27 +215,39 @@ angular.module('starter.controllers', [])
 		//경위도표시
 		$scope.lat = position.coords.latitude;
 		$scope.lng = position.coords.longitude;
-		ride.put(position,courseDetailId);
+		ride.post(position,$scope.courseDetailId);
 	}
 	
 	$scope.displayTimer = function(){
-		ride.get(courseDetailId).then(function(result){
+		ride.get($scope.courseDetailId).then(function(result){
+			for(var i in $scope.riderList){
+				$scope.riderList[i].setMap(null);
+			}
+			$scope.riderList = new Array();
 			
 			for(var i in result.data){
-				console.log(result.data[i])
-				new daum.maps.CustomOverlay({
+				tmpPosition = new daum.maps.LatLng(result.data[i].latitude, result.data[i].longitude);
+				$scope.riderList[result.data[i].idx] = new daum.maps.CustomOverlay({
 				    map: $scope.detailMap,
-				    position: new daum.maps.LatLng(result.data[i].latitude, result.data[i].longitude),
-				    content: "<i class=\"ion-android-bicycle balanced icon-large\" style=\"font-size:200%\"></i>",
+				    position: tmpPosition,
+				    content: "<i class=\"ion-android-bicycle assertive dissolveOut icon-large\" style=\"font-size:200%\"></i>",
 				    yAnchor: 0.5 
 				});
-				
+								
 			}
+			//console.log($scope.riderList)
+			
 		});
 	}
 	
+	$scope.joinRide = function(){
+		ride.put($scope.courseDetailId);
+	}
+	
+	
+	$scope.riderList = new Array();
 	$scope.watchID =  navigator.geolocation.watchPosition($scope.mapMoveThisPosition);
-	$scope.displayTimerID = setInterval($scope.displayTimer, 1000);
+	$scope.displayTimerID = setInterval($scope.displayTimer, 5000);
 })
 	
 
