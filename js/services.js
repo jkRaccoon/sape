@@ -127,11 +127,11 @@ angular.module('starter.services', ['ngResource'])
 			return $http.put("http://sape.kr/riding/"+courseDetailId,httpRequest);
 		},
 		delete:function(courseDetailId){
-			var httpRequest  = {
-				token:localStorage.getItem('token')
-			};
-			console.log(httpRequest)
-			return $http.delete("http://sape.kr/riding/"+courseDetailId,httpRequest);
+			var token = localStorage.getItem('token');
+						
+			
+			
+			return $http.delete("http://sape.kr/riding/"+token);
 		}
 	}
 }).factory('myInfo',function($http){

@@ -1,7 +1,7 @@
 angular.module('starter.controllers', [])
 
-//코스 상세보기
-.controller('CourseCtrl', function($scope, $ionicLoading, $compile, $stateParams, $ionicPopup,Course) {
+//라이딩 리스트
+.controller('RideList', function($scope, $ionicLoading, $compile, $stateParams, $ionicPopup,Course) {
 	
 	function initialize() {
 		var container = document.getElementById('map'); //지도를 담을 영역의 DOM 레퍼런스
@@ -26,7 +26,7 @@ angular.module('starter.controllers', [])
     }
     
    
-    var courseId = $stateParams.courseId; //코스아이디
+    $scope.courseId = $stateParams.courseId; //코스아이디
     
     
 	
@@ -68,12 +68,12 @@ angular.module('starter.controllers', [])
 	}
 	
 	
-	Course.routeLiveList(courseId).success(function(result){
+	Course.routeLiveList($scope.courseId).success(function(result){
 		$scope.courseList = result;
 	});
 	
 	
-	Course.route(courseId).success(function(result){
+	Course.route($scope.courseId).success(function(result){
 		
 		var linePath = new Array();
 		var bounds = new daum.maps.LatLngBounds();
@@ -128,13 +128,15 @@ angular.module('starter.controllers', [])
 
 })
 //라이딩 상세보기
-.controller('CourseDetailCtrl', function($scope, $stateParams, ride) {
-	$scope.courseDetailId = $stateParams.courseDetailId;
-	//디스트로이 이벤트 (와치이벤트해제)
+.controller('RideDetail', function($scope, $stateParams, ride) {
+	$scope.courseDetailId	= $stateParams.courseDetailId;
+	$scope.courseId			= $stateParams.courseId;
+	$scope.displayTimerID	= false;
+	//디스트로이 이벤트 
 	$scope.$on("$destroy", function handler() {		
 		if($scope.watchID)navigator.geolocation.clearWatch($scope.watchID);
-		if($scope.displayTimerID)clearInterval($scope.displayTimerID);
-		ride.delete($scope.courseDetailId);		
+		
+		$scope.leaveRide();
     });
 	
 	//지도 추가 
@@ -150,7 +152,7 @@ angular.module('starter.controllers', [])
 	
 	//코스정보 표시.
 	
-	ride.route().success(function(result){
+	ride.route($scope.courseId).success(function(result){
 		
 		var linePath = new Array();
 		for(var i in result){
@@ -230,7 +232,7 @@ angular.module('starter.controllers', [])
 				$scope.riderList[result.data[i].idx] = new daum.maps.CustomOverlay({
 				    map: $scope.detailMap,
 				    position: tmpPosition,
-				    content: "<i class=\"ion-android-bicycle assertive dissolveOut icon-large\" style=\"font-size:200%\"></i>",
+				    content: "<i class=\"ion-android-bicycle assertive dissolveOut5s icon-large\" style=\"font-size:200%\"></i>",
 				    yAnchor: 0.5 
 				});
 								
@@ -242,12 +244,22 @@ angular.module('starter.controllers', [])
 	
 	$scope.joinRide = function(){
 		ride.put($scope.courseDetailId);
+		$scope.displayTimer();
+		$scope.displayTimerID = setInterval($scope.displayTimer, 5000);
 	}
 	
+	$scope.leaveRide = function(){
+		if($scope.displayTimerID)clearInterval($scope.displayTimerID);
+		ride.delete($scope.courseDetailId);
+		for(var i in $scope.riderList){
+			$scope.riderList[i].setMap(null);
+		}
+		$scope.displayTimerID	= false;
+	}
 	
 	$scope.riderList = new Array();
 	$scope.watchID =  navigator.geolocation.watchPosition($scope.mapMoveThisPosition);
-	$scope.displayTimerID = setInterval($scope.displayTimer, 5000);
+	
 })
 	
 

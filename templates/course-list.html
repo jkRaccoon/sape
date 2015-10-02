@@ -4,7 +4,7 @@
 		
 		<ion-list  >
 			<div class='item item-divider'>현재 라이딩중인 리스트 보기</div>			
-			<ion-item href="#/tab/course/detail/{{course.idx}}" ng-repeat="course in courseList">
+			<ion-item href="#/tab/course/{{courseId}}/{{course.idx}}" ng-repeat="course in courseList">
 				{{course.title}}
 			</ion-item>
 		</ion-list>
