@@ -125,6 +125,7 @@ angular.module('starter.controllers', [])
 
 	});
 	
+	
 
 })
 //라이딩 상세보기
@@ -270,6 +271,8 @@ angular.module('starter.controllers', [])
 	});
 	
 	$scope.uuid = myInfo.token();
+	
+	
 	
 	
 })

@@ -36,6 +36,14 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
 			});	
 		}
 		
+		facebookConnectPlugin.login(["public_profile"], function(userData){
+			console.log("UserInfo: ", userData);
+		},
+		  function loginError (error) {
+		    console.error(error)
+		  }
+		);
+		
 	}else{
 		if(!token){
 			localStorage.setItem('token','abcdefg-ABCDEFG-1234567-7654321'+makeid());
@@ -52,10 +60,10 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
 	
 	
 	
+	
 		
 	
-	function makeid()
-	{
+	function makeid(){
 	    var text = "";
 	    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 	
