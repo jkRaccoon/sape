@@ -35,14 +35,35 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
 				//console.log(result.data);
 			});	
 		}
-		
-		facebookConnectPlugin.login(["public_profile"], function(userData){
-			console.log("UserInfo: ", userData);
-		},
-		  function loginError (error) {
-		    console.error(error)
-		  }
-		);
+// 		
+// 		facebookConnectPlugin.login(["public_profile"], function(userData){
+// 			console.log(userData );
+// 		},
+// 		  function loginError (error) {
+// 		    console.error(error)
+// 		  }
+// 		);
+
+		facebookConnectPlugin.getLoginStatus(function(response){
+			console.log(response.status)
+			if (response.status === 'connected') {
+				// the user is logged in and has authenticated your
+				// app, and response.authResponse supplies
+				// the user's ID, a valid access token, a signed
+				// request, and the time the access token 
+				// and signed request each expire
+				var uid = response.authResponse.userID;
+				var accessToken = response.authResponse.accessToken;
+			} else if (response.status === 'not_authorized') {
+				// the user is logged in to Facebook, 
+				// but has not authenticated your app
+			} else {
+				// the user isn't logged in to Facebook.
+			}
+		}, function(error){
+			//실패
+			console.log(error);
+		})
 		
 	}else{
 		if(!token){
@@ -79,31 +100,27 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
 .config(function($stateProvider, $urlRouterProvider,$httpProvider) {
 
 	
-  // Ionic uses AngularUI Router which uses the concept of states
-  // Learn more here: https://github.com/angular-ui/ui-router
-  // Set up the various states which the app can be in.
-  // Each state's controller can be found in controllers.js
-  $stateProvider
-
-  // setup an abstract state for the tabs directive
-    .state('tab', {
-    url: '/tab',
-    abstract: true,
-    templateUrl: 'templates/tabs.html'
-  })
-
-  // Each tab has its own nav history stack:
-
-  .state('tab.dash', {
-    url: '/dash',
-    views: {
-      'tab-dash': {
-        templateUrl: 'templates/tab-dash.html',
-        controller: 'DashCtrl'
-      }
-    }
-  })
-  
+	// Ionic uses AngularUI Router which uses the concept of states
+	// Learn more here: https://github.com/angular-ui/ui-router
+	// Set up the various states which the app can be in.
+	// Each state's controller can be found in controllers.js
+	$stateProvider
+	
+	
+	.state('tab', {
+		url: '/tab',
+		abstract: true,
+		templateUrl: 'templates/tabs.html'
+	})
+	.state('tab.dash', {
+		url: '/dash',
+		views: {
+			'tab-dash': {
+				templateUrl: 'templates/tab-dash.html',
+				controller: 'DashCtrl'
+			}
+		}
+	})
 	.state('tab.course', {
 		url: '/course/:courseId',
 		views: {
@@ -121,38 +138,45 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
 			}
 		}
 	})
-
-  .state('tab.chats', {
-      url: '/chats',
-      views: {
-        'tab-chats': {
-          templateUrl: 'templates/tab-chats.html',
-          controller: 'ChatsCtrl'
-        }
-      }
-    })
-    .state('tab.chat-detail', {
-      url: '/chats/:chatId',
-      views: {
-        'tab-chats': {
-          templateUrl: 'templates/chat-detail.html',
-          controller: 'ChatDetailCtrl'
-        }
-      }
-    })
-
-  .state('tab.account', {
-    url: '/account',
-    views: {
-      'tab-account': {
-        templateUrl: 'templates/tab-account.html',
-        controller: 'AccountCtrl'
-      }
-    }
-  });
+	.state('tab.chats', {
+		url: '/chats',
+		views: {
+			'tab-chats': {
+				templateUrl: 'templates/tab-chats.html',
+				controller: 'ChatsCtrl'
+			}
+		}
+	})
+	.state('tab.chat-detail', {
+		url: '/chats/:chatId',
+			views: {
+			'tab-chats': {
+				templateUrl: 'templates/chat-detail.html',
+				controller: 'ChatDetailCtrl'
+			}
+		}
+	})
+	.state('tab.account', {
+		url: '/account',
+			views: {
+			'tab-account': {
+				templateUrl: 'templates/tab-account.html',
+				controller: 'AccountCtrl'
+			}
+		}
+	})
+	.state('tab.login', {
+		url: '/login',
+			views: {
+			'tab-account': {
+				templateUrl: 'templates/login.html',
+				controller: 'Login'
+			}
+		}
+	});
 
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/tab/dash');
+  $urlRouterProvider.otherwise('/tab/login');
   
   
   

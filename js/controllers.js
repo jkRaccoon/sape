@@ -293,4 +293,20 @@ angular.module('starter.controllers', [])
 		enableGps: true,
 		enableDailyRecommend : true
 	};
+})
+
+.controller('Login', function($scope) {
+	
+	$scope.LoginWithFacebook = function(){
+		facebookConnectPlugin.login(["public_profile"], function(userData){
+ 			console.log(userData );
+ 		},
+ 		  function loginError (error) {
+ 		    console.error(error)
+ 		  }
+ 		);
+	}
 });
+
+
+
