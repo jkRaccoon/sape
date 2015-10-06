@@ -75,6 +75,22 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
 				//console.log(result.data);
 			});
 		}
+		window.fbAsyncInit = function() {
+		    FB.init({
+		      appId      : '902315989804229',
+		      xfbml      : true,
+		      version    : 'v2.4'
+		    });
+		    
+		  };
+		
+		  (function(d, s, id){
+		     var js, fjs = d.getElementsByTagName(s)[0];
+		     if (d.getElementById(id)) {return;}
+		     js = d.createElement(s); js.id = id;
+		     js.src = "//connect.facebook.net/ko_KR/sdk.js";
+		     fjs.parentNode.insertBefore(js, fjs);
+		   }(document, 'script', 'facebook-jssdk'));
 	}
 	
 	
@@ -157,7 +173,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
 		}
 	})
 	.state('tab.account', {
-		url: '/account',
+			url: '/account',
 			views: {
 			'tab-account': {
 				templateUrl: 'templates/tab-account.html',
@@ -165,18 +181,14 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
 			}
 		}
 	})
-	.state('tab.login', {
+	.state('login', {
 		url: '/login',
-			views: {
-			'tab-account': {
-				templateUrl: 'templates/login.html',
-				controller: 'Login'
-			}
-		}
+		templateUrl: 'templates/login.html',
+		controller: 'Login'
 	});
 
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/tab/login');
+  $urlRouterProvider.otherwise('/login');
   
   
   

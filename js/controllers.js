@@ -295,18 +295,49 @@ angular.module('starter.controllers', [])
 	};
 })
 
-.controller('Login', function($scope) {
+.controller('Login', function($scope,$state) {
+	
+	
 	
 	$scope.LoginWithFacebook = function(){
-		facebookConnectPlugin.login(["public_profile"], function(userData){
- 			console.log(userData );
- 		},
- 		  function loginError (error) {
- 		    console.error(error)
- 		  }
- 		);
+		if(window.cordova){
+			facebookConnectPlugin.login(["public_profile"], function(userData){
+	 			$scope.LoginOkFacebook(userData );
+	 		},
+	 		  function loginError (error) {
+	 		    console.error(error)
+	 		  }
+	 		);
+		}else{
+			FB.login(function(response) {
+			    if (response.authResponse) {
+			     console.log('Welcome!  Fetching your information.... ');
+			     FB.api('/me', function(response) {
+			       console.log('Good to see you, ' + response.name + '.');
+			     });
+			    } else {
+			     console.log('User cancelled login or did not fully authorize.');
+			    }
+			});
+		}
+		
 	}
-});
+	
+	$scope.LoginOkFacebook = function(userData){
+		$state.go('tab.dash');
+	}
+})
+.directive('hideTabs', function($rootScope) {
+  return {
+      restrict: 'A',
+      link: function($scope, $el) {
+          $rootScope.hideTabs = 'tabs-item-hide';
+          $scope.$on('$destroy', function() {
+              $rootScope.hideTabs = '';
+          });
+      }
+  };
+});;
 
 
 

@@ -134,7 +134,20 @@ angular.module('starter.services', ['ngResource'])
 			return $http.delete("http://sape.kr/riding/"+token);
 		}
 	}
-}).factory('myInfo',function($http){
+})
+.factory('login',function($http){
+
+	return {
+		facebookLogin:function(userData){
+			var httpRequest  = {
+				
+			};
+			return $http.post("http://sape.kr/login/facebook/",httpRequest);
+			
+		}
+	}
+})
+.factory('myInfo',function($http){
 	
 	
 	
@@ -144,5 +157,6 @@ angular.module('starter.services', ['ngResource'])
 			return localStorage.getItem('token');
 		}
 	}
-});
+})
+;
 
