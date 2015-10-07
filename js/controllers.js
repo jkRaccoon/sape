@@ -288,10 +288,14 @@ angular.module('starter.controllers', [])
 	$scope.chat = Chats.get($stateParams.chatId);
 })
 
-.controller('AccountCtrl', function($scope) {
+.controller('AccountCtrl', function($scope,$state) {
 	$scope.settings = {
 		enableGps: true,
 		enableDailyRecommend : true
+	};
+	
+	$scope.logout = function(){
+		$state.go('login');
 	};
 })
 
@@ -311,20 +315,30 @@ angular.module('starter.controllers', [])
 		}else{
 			FB.login(function(response) {
 			    if (response.authResponse) {
-			     console.log('Welcome!  Fetching your information.... ');
-			     FB.api('/me', function(response) {
-			       console.log('Good to see you, ' + response.name + '.');
-			     });
+				    $scope.LoginOkFacebook(response );
 			    } else {
 			     console.log('User cancelled login or did not fully authorize.');
 			    }
-			});
+			},
+	 		  {scope: 'public_profile'}
+	 		);
 		}
 		
 	}
 	
 	$scope.LoginOkFacebook = function(userData){
-		$state.go('tab.dash');
+		if(window.cordova){
+			$state.go('tab.dash');
+		}else{
+			FB.api("/me", function(response){
+	 			console.log(response);
+	 			$state.go('tab.dash');
+	 		});
+
+		}
+		
+		
+		
 	}
 })
 .directive('hideTabs', function($rootScope) {
