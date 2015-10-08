@@ -305,32 +305,38 @@ angular.module('starter.controllers', [])
 	
 	$scope.LoginWithFacebook = function(){
 		if(window.cordova){
-			facebookConnectPlugin.login(["public_profile"], function(userData){
-	 			$scope.LoginOkFacebook(userData );
+			facebookConnectPlugin.login(["public_profile"], function(loginData){
+				
+	 			$scope.LoginOkFacebook(loginData );
 	 		},
 	 		  function loginError (error) {
 	 		    console.error(error)
 	 		  }
 	 		);
 		}else{
-			FB.login(function(response) {
-			    if (response.authResponse) {
-				    $scope.LoginOkFacebook(response );
+			FB.login(function(loginData) {
+				console.log(loginData)
+			    if (loginData.authResponse) {
+				    
+				    $scope.LoginOkFacebook(loginData );
 			    } else {
 			     console.log('User cancelled login or did not fully authorize.');
 			    }
-			},
-	 		  {scope: 'public_profile'}
+			},{
+		 		  scope: 'public_profile,user_friends',
+		 		  return_scopes: true
+	 		  }
 	 		);
 		}
 		
 	}
 	
-	$scope.LoginOkFacebook = function(userData){
+	$scope.LoginOkFacebook = function(loginData){
+		
 		if(window.cordova){
 			$state.go('tab.dash');
 		}else{
-			FB.api("/me", function(response){
+			FB.api("/me",{"fields":"picture,name,cover"}, function(response){
 	 			console.log(response);
 	 			$state.go('tab.dash');
 	 		});
