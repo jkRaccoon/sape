@@ -266,6 +266,7 @@ angular.module('starter.controllers', [])
 
 .controller('DashCtrl', function($scope,$http,$httpParamSerializerJQLike,Course,myInfo) {
 	Course.list().success(function(result){
+		console.log(result)
 		$scope.routeList = result;
 		
 	});

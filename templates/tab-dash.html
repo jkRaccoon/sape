@@ -1,10 +1,10 @@
-<ion-view view-title="SAPE">
-  <ion-content class="padding">
-    <div class="list card" ng-repeat="routeList in routeList">
-      <div class="item item-divider">{{routeList.title}} ({{routeList.user}})</div>
-      <a class="item item-body" href="#/tab/course/{{routeList.idx}}">
+<ion-view view-title="SAPE" >
+  <ion-content >
+    <div class="list " ng-repeat="routeList in routeList">
+      <div class="item item-divider">{{routeList.categoryName}} </div>
+      <a class="item" ng-repeat="route in routeList.List" href="#/tab/course/{{route.idx}}">
         <div>
-        	{{routeList.distance}}km - 약 {{routeList.time}}분
+        	{{route.distance}}km - 약 {{route.time}}분
         </div>
       </a>
     </div>
