@@ -70,3 +70,31 @@
 }
 
 .icon-sape_logo:before { content: '\e801'; font-size:90% } /* '?' */
+
+.routeDivider {
+	padding: 0 10px;
+	height:40px;
+	line-height: 36px;
+	vertical-align: middle;
+}
+.sapeLogo {
+	color: #ffcc00;
+	
+	vertical-align: middle;
+}
+
+.sapeLogo i:before{
+	font-size: 150%;
+	background: linear-gradient(45deg, #f9a717 , #ffcc00 );
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+
+}
+
+#route{}
+#route	.list { margin: 0}
+		.routeLike{margin-left:5%}
+		.routeLikeIco{ border: 3px solid #cccccc; display: block; width: 60px; height: 60px; border-radius: 30px}
+		.routeLikeIco:before{ font-size: 270%; margin: 7px 0 0 9px; }
+		.routeItemUpInfo{height:50px;}
+		.routeItemDownInfo{height:50px;}

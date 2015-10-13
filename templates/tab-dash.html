@@ -1,13 +1,45 @@
-<ion-view view-title="SAPE" >
-  <ion-content >
-    <div class="list " ng-repeat="routeList in routeList">
-      <div class="item item-divider">{{routeList.categoryName}} </div>
-      <a class="item" ng-repeat="route in routeList.List" href="#/tab/course/{{route.idx}}">
-        <div>
-        	{{route.distance}}km - 약 {{route.time}}분
-        </div>
-      </a>
-    </div>
+
+<ion-view  >
+	<ion-nav-title class="sapeLogo">
+     	<i class="icon icon-sape_logo"></i> 같이 달려요!
+    </ion-nav-title>
+	<ion-content id="route" >
+		
+	    <div class="list " ng-repeat="routeList in routeList">
+	      <div class="item item-divider item-dark routeDivider ">{{routeList.categoryName}} 코스</div>
+	      <a class="item row" ng-repeat="route in routeList.List" href="#/tab/course/{{route.idx}}">
+	        <div class="col col-75 col-top">
+		        <div class="routeItemUpInfo row" >
+		        	<div class="col col-10">
+			        	IN
+		        	</div>
+		        	<div class="col col-80">
+			        	<i class="icon icon-sape_logo"></i>{{route.distance}}km
+		        	</div>
+		        	<div class="col col-10">
+			        	OUT
+		        	</div>
+		        </div>
+		        <div  class="routeItemDownInfo row">
+			       
+			        <div class="col col-10">
+			        	{{route.in}}
+		        	</div>
+		        	<div class="col col-80">
+			        	<i class="icon ion-ios-stopwatch-outline"></i> {{route.time}}분
+		        	</div>
+		        	<div class="col col-10">
+			        	{{route.out}}
+		        	</div>
+		        </div>
+	        	
+	        </div>
+	        <div class="col routeLike">
+		        <i class="icon ion-heart routeLikeIco"></i>
+		        <p>20 Loves</p>
+	        </div>
+	      </a>
+	    </div>
    
-  </ion-content>
+	</ion-content>
 </ion-view>
