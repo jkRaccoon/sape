@@ -303,7 +303,7 @@ angular.module('starter.controllers', [])
 .controller('Login', function($scope,$state) {
 	
 	//테스트코드-인증패스
-	$state.go('tab.dash');
+	//$state.go('tab.dash');
 	$scope.LoginWithFacebook = function(){
 		if(window.cordova){
 			facebookConnectPlugin.login(["public_profile"], function(loginData){
