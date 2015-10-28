@@ -154,7 +154,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
 	if(!token){
 		$urlRouterProvider.otherwise('/login');
 	}else{
-		$urlRouterProvider.otherwise('/dash');
+		$urlRouterProvider.otherwise('/tab/dash');
 	}
   
   
