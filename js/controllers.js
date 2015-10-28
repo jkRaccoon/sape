@@ -296,6 +296,7 @@ angular.module('starter.controllers', [])
 	};
 	
 	$scope.logout = function(){
+		localStorage.removeItem('token');
 		$state.go('login');
 	};
 })
