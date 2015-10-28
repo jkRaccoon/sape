@@ -149,8 +149,13 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
 		controller: 'Login'
 	});
 
-  // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/login');
+	// if none of the above states are matched, use this as the fallback
+	var token = localStorage.getItem('token');
+	if(!token){
+		$urlRouterProvider.otherwise('/login');
+	}else{
+		$urlRouterProvider.otherwise('/dash');
+	}
   
   
   
