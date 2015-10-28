@@ -72,9 +72,9 @@
 .icon-sape_logo:before { content: '\e801'; font-size:90% } /* '?' */
 
 .routeDivider {
-	padding: 0 10px;
-	height:40px;
-	line-height: 36px;
+	padding: 0 5px;
+	height:20px;
+	line-height: 24px;
 	vertical-align: middle;
 }
 .sapeLogo {
@@ -93,8 +93,31 @@
 
 #route{}
 #route	.list { margin: 0}
-		.routeLike{margin-left:5%}
-		.routeLikeIco{ border: 3px solid #cccccc; display: block; width: 60px; height: 60px; border-radius: 30px}
-		.routeLikeIco:before{ font-size: 270%; margin: 7px 0 0 9px; }
-		.routeItemUpInfo{height:50px;}
-		.routeItemDownInfo{height:50px;}
+	.routeItem{border-bottom:5px solid #f3f3f3}
+		.routeLike{margin:7px 0 0 4%; float:left;width:15%}
+		.routeLike > p {font-size: 0.7em;text-align: center}
+			.routeLikeCircle{  width:30px; height:30px;border: 3px solid #cccccc;border-radius: 15px; text-align: center; line-height: 27px; vertical-align: middle; color:#cccccc; margin: 0 auto}	
+			.routeLikeIco:before{ font-size: 100%; }
+		.routeInfo{float:left; width:81%;}
+		.routeItemUpInfo{overflow: hidden; clear: both}
+			.routeItemUpInfoLeft{float:left; width: 11%; text-align: center}
+			.routeItemUpInfoMiddle{float:left; width:78%; text-align: center}
+			.routeItemUpInfoRight{float:left; width: 11%; text-align: center}
+		.routeItemDownInfo{}
+			.routeItemDownInfoLeft{float:left; width: 11%; text-align: center}
+			.routeItemDownInfoMiddle{float:left; width: 78%; text-align: center}
+			.routeItemDownInfoRight{float:left; width: 11%; text-align: center}
+		.routeItemGraph{overflow: hidden; clear: both}
+			.routeItemGraphLeftIco{float:left; width: 11%;background: url(../img/dashGraphBg.png) no-repeat ; background-size: 50% 100%; background-position: right center; text-align: center}
+			.routeItemGraphLeftIco > img {width:12px; display: block; margin:0 auto}
+			.routeItemGraphLine{float:left; width: 78%;height:12px; background: url(../img/dashGraphBg.png)no-repeat;background-size: 100% 100%;}
+			.routeItemGraphRightIco{float:left; width: 11%;background: url(../img/dashGraphBg.png)no-repeat ; background-size: 50% 100%; text-align: center}
+			.routeItemGraphRightIco > img {width:12px; display: block; margin:0 auto }
+		.routeItemFoot{overflow: hidden; clear: both}
+			.routeItemFootLeft{float:left;width: 11%; text-align: center; color:#cccccc}
+			.routeItemFootMiddle{float:left;width: 78%;height:12px;}
+			.routeItemFootRight{float:left;width: 11%; text-align: center; color:#cccccc}
+		
+			
+			
+			

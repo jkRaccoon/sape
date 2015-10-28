@@ -300,51 +300,36 @@ angular.module('starter.controllers', [])
 	};
 })
 
-.controller('Login', function($scope,$state) {
+.controller('Login', function($scope,$state , login) {
 	
 	//테스트코드-인증패스
 	//$state.go('tab.dash');
 	$scope.LoginWithFacebook = function(){
 		if(window.cordova){
 			facebookConnectPlugin.login(["public_profile"], function(loginData){
-				
-	 			$scope.LoginOkFacebook(loginData );
-	 		},
-	 		  function loginError (error) {
-	 		    console.error(error)
-	 		  }
-	 		);
+				$scope.LoginOkFacebook(loginData.authResponse.accessToken , loginData.authResponse.userID );
+			},function loginError (error) {
+				console.error(error)
+			});
 		}else{
 			FB.login(function(loginData) {
-				console.log(loginData)
 			    if (loginData.authResponse) {
-				    
-				    $scope.LoginOkFacebook(loginData );
+				    $scope.LoginOkFacebook(loginData.authResponse.accessToken , loginData.authResponse.userID );
 			    } else {
-			     console.log('User cancelled login or did not fully authorize.');
+			    	alert('오류가 발생하여 더이상 진행할수 없습니다.')
 			    }
 			},{
-		 		  scope: 'public_profile,user_friends',
-		 		  return_scopes: true
-	 		  }
-	 		);
+				scope: 'public_profile,user_friends',
+				return_scopes: true
+			});
 		}
-		
 	}
 	
-	$scope.LoginOkFacebook = function(loginData){
+	$scope.LoginOkFacebook = function(token, id){
 		
-		if(window.cordova){
+		login.fbLogin(token, id).then(function(response){
 			$state.go('tab.dash');
-		}else{
-			FB.api("/me",{"fields":"picture,name,cover"}, function(response){
-	 			console.log(response);
-	 			$state.go('tab.dash');
-	 		});
-
-		}
-		
-		
+		});
 		
 	}
 })

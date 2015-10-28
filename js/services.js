@@ -138,11 +138,13 @@ angular.module('starter.services', ['ngResource'])
 .factory('login',function($http){
 
 	return {
-		facebookLogin:function(userData){
+		fbLogin:function(token, id){
+			
 			var httpRequest  = {
-				
+				fbToken:token,
+				fbid:id
 			};
-			return $http.post("http://sape.kr/login/facebook/",httpRequest);
+			return $http.post("http://sape.kr/login/fb",httpRequest);
 			
 		}
 	}
