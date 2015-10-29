@@ -266,7 +266,7 @@ angular.module('starter.controllers', [])
 
 .controller('DashCtrl', function($scope,$http,$httpParamSerializerJQLike,Course,myInfo) {
 	Course.list().success(function(result){
-		console.log(result)
+		//console.log(result)
 		$scope.routeList = result;
 		
 	});
@@ -301,7 +301,7 @@ angular.module('starter.controllers', [])
 	};
 })
 
-.controller('Login', function($scope,$state , login) {
+.controller('Login', function($scope,$state , $http,login) {
 	
 	//테스트코드-인증패스
 	//$state.go('tab.dash');
@@ -326,12 +326,12 @@ angular.module('starter.controllers', [])
 		}
 	}
 	
-	$scope.LoginOkFacebook = function(token, id){
+	$scope.LoginOkFacebook = function(fbtoken, fbid){
 		
 		var token = createToken();
 		localStorage.setItem('token',token);
-		
-		login.fbLogin(token, id).then(function(response){
+		$http.defaults.headers.common.token = token; //헤더 토큰 설정
+		login.fbLogin(fbtoken, fbid).then(function(response){
 			$state.go('tab.dash');
 		});
 		

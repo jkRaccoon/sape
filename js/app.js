@@ -50,8 +50,6 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
 		$http.defaults.headers.common.token = token;
 	}
 	
-	
-	
   });
 })
 
