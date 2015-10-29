@@ -24,9 +24,13 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
     }
 	if(!window.cordova){
 		//웹접근일때 페이스북 모듈 초기화.
+	
+		
 		window.fbAsyncInit = function() {
+			var host = window.location.host;
+			var fbAppId = (host=="192.168.0.11:8100")?"912608968774931":"902315989804229";
 			FB.init({
-				appId	: '902315989804229',
+				appId	: fbAppId,
 				xfbml	: true,
 				version	: 'v2.4'
 			});    
