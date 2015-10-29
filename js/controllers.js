@@ -327,11 +327,37 @@ angular.module('starter.controllers', [])
 	
 	$scope.LoginOkFacebook = function(token, id){
 		
+		var token = createToken();
+		localStorage.setItem('token',token);
+		
 		login.fbLogin(token, id).then(function(response){
 			$state.go('tab.dash');
 		});
 		
+		function createToken(){
+			var freFix;
+			if(window.cordova){
+				freFix = device.uuid;
+			}else{
+				freFix = makeid(10);
+			}
+			return freFix+makeid(5);
+			
+		}
+		
+		function makeid(keyLength){
+		    var text = "";
+		    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+		
+		    for( var i=0; i < keyLength; i++ )
+		        text += possible.charAt(Math.floor(Math.random() * possible.length));
+		
+		    return text;
+		}
+		
 	}
+	
+	
 })
 .directive('hideTabs', function($rootScope) {
   return {

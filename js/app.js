@@ -44,37 +44,13 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
 		    fjs.parentNode.insertBefore(js, fjs);
 		}(document, 'script', 'facebook-jssdk'));
 	}
-	
 	var token = localStorage.getItem('token');
-	if(!token){
-		//토큰 없을때 토큰 생성
-		token = createToken();
-		localStorage.setItem('token',token);
+	if(token){
+		//토큰이 있으면 해더에 토큰 지정
+		$http.defaults.headers.common.token = token;
 	}
 	
-	//보안을 위해헤더토큰 지정.
-	$http.defaults.headers.common.token = token;
 	
-	function makeid(keyLength){
-	    var text = "";
-	    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-	
-	    for( var i=0; i < keyLength; i++ )
-	        text += possible.charAt(Math.floor(Math.random() * possible.length));
-	
-	    return text;
-	}
-	
-	function createToken(){
-		var freFix;
-		if(window.cordova){
-			freFix = device.uuid;
-		}else{
-			freFix = makeid(10);
-		}
-		return freFix+makeid(5);
-		
-	}
 	
   });
 })
