@@ -91,13 +91,13 @@ angular.module('starter.services', ['ngResource'])
 	}
 }).factory('ride',function($http){
 	return{
-		route:function(courseId){
-			return $http.get('http://sape.kr/routeDetail?routeIdx='+courseId);
+		route:function(rideId){
+			return $http.get('http://sape.kr/riding/info/'+rideId);
 		},
 		post:function(position,courseDetailId){
 			
 			var httpRequest  = {
-				token:localStorage.getItem('token'),
+				
 				latitude : position.coords.latitude,
 				longitude:position.coords.longitude,
 				accuracy:position.coords.accuracy,
@@ -112,21 +112,15 @@ angular.module('starter.services', ['ngResource'])
 			
 		},
 		get:function(rideId){
-			var token=localStorage.getItem('token');
+			
 			return $http.get("http://sape.kr/riding/"+rideId);
 		},
 		put:function(courseDetailId){
-			var httpRequest  = {
-				token:localStorage.getItem('token')
-			};
-			return $http.put("http://sape.kr/riding/"+courseDetailId,httpRequest);
+			
+			return $http.put("http://sape.kr/riding/"+courseDetailId);
 		},
 		delete:function(courseDetailId){
-			var token = localStorage.getItem('token');
-						
-			
-			
-			return $http.delete("http://sape.kr/ridings");
+			return $http.delete("http://sape.kr/riding");
 		}
 	}
 })

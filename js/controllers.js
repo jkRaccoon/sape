@@ -87,12 +87,14 @@ angular.module('starter.controllers', [])
 	
 	//코스정보 표시.
 	
-	ride.route($scope.courseId).success(function(result){
+	ride.route($scope.courseDetailId).success(function(result){
 		
 		var linePath = new Array();
-		for(var i in result){
-			linePath.push(new daum.maps.LatLng(result[i]["lat"], result[i]["lng"]));
+		for(var i in result.path){
+			linePath.push(new daum.maps.LatLng(result.path[i]["lat"], result.path[i]["lng"]));
 		}
+		
+		
 		// 지도에 표시할 선을 생성합니다
 		var polyline = new daum.maps.Polyline({
 		    path: linePath, // 선을 구성하는 좌표배열 입니다
@@ -155,8 +157,11 @@ angular.module('starter.controllers', [])
 		ride.post(position,$scope.courseDetailId);
 	}
 	
+	//라이더 리스트
+	
 	$scope.displayTimer = function(){
 		ride.get($scope.courseDetailId).then(function(result){
+			$scope.riderListResult = result.data;
 			for(var i in $scope.riderList){
 				$scope.riderList[i].setMap(null);
 			}
@@ -164,12 +169,12 @@ angular.module('starter.controllers', [])
 			
 			for(var i in result.data){
 				tmpPosition = new daum.maps.LatLng(result.data[i].latitude, result.data[i].longitude);
-				$scope.riderList[result.data[i].idx] = new daum.maps.CustomOverlay({
+				$scope.riderList.push(new daum.maps.CustomOverlay({
 				    map: $scope.detailMap,
 				    position: tmpPosition,
 				    content: "<i class=\"ion-android-bicycle assertive dissolveOut5s icon-large\" style=\"font-size:200%\"></i>",
 				    yAnchor: 0.5 
-				});
+				}));
 								
 			}
 			//console.log($scope.riderList)
