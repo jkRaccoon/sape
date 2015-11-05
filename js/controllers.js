@@ -52,8 +52,8 @@ angular.module('starter.controllers', [])
 		
 	}
 	
-	Course.routeLiveList($scope.courseId).success(function(result){
-		console.log(result)
+	Course.routeRoomList($scope.courseId).success(function(result){
+		
 		$scope.courseList = result;
 	});
 	

@@ -64,8 +64,8 @@ angular.module('starter.services', ['ngResource'])
 		route:function(courseId){
 			return $http.get('http://sape.kr/routeDetail?routeIdx='+courseId);
 		},
-		routeLiveList:function(courseId){
-			return $http.get('http://sape.kr/routeLiveList?routeIdx='+courseId);
+		routeRoomList:function(courseId){
+			return $http.get('http://sape.kr/route/room/'+courseId);
 		},
 		updateMyPosition:function(position,courseDetailId){
 			var httpRequest  = {
