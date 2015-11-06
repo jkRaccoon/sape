@@ -59,7 +59,7 @@ angular.module('starter.services', ['ngResource'])
 }).factory('Course',function($http){
 	return{
 		list:function(){
-			return $http.get('http://sape.kr/routeList');			
+			return $http.get('http://sape.kr/list');			
 		},
 		route:function(courseId){
 			return $http.get('http://sape.kr/routeDetail?routeIdx='+courseId);
@@ -149,5 +149,20 @@ angular.module('starter.services', ['ngResource'])
 		}
 	}
 })
+.factory('friend',function($http){
+	
+	return {
+		list:function(){
+			return $http.get("http://sape.kr/user/list");
+		},
+		remove:function(){
+			
+		},
+		get:function(idx){
+			return $http.get("http://sape.kr/user/"+idx);
+		}
+	}
+})
+
 ;
 

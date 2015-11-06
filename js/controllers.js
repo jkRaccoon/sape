@@ -217,15 +217,25 @@ angular.module('starter.controllers', [])
 	
 })
 
-.controller('ChatsCtrl', function($scope, Chats) {
-	$scope.chats = Chats.all();
+.controller('friendCtrl', function($scope, friend) {
+	friend.list().success(function(result){
+		//console.log(result)
+		$scope.friendlist = result;
+		
+	});
+	
+	console.log($scope.friendlist)
 	$scope.remove = function(chat) {
-		Chats.remove(chat);
+		friendlist.remove(chat);
 	};
 })
 
-.controller('ChatDetailCtrl', function($scope, $stateParams, Chats) {
-	$scope.chat = Chats.get($stateParams.chatId);
+.controller('friendDetailCtrl', function($scope, $stateParams, friend) {
+	friend.get($stateParams.friendIdx).success(function(result){
+		//console.log(result)
+		$scope.friend = result;
+		
+	});;
 })
 
 .controller('AccountCtrl', function($scope,$state) {
