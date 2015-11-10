@@ -12,102 +12,42 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
     if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
-      cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-      cordova.plugins.Keyboard.disableScroll(true);
-
+    	cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+		cordova.plugins.Keyboard.disableScroll(true);
     }
+    
     
     if (window.StatusBar) {
       // org.apache.cordova.statusbar required
       
       //StatusBar.styleLightContent();
     }
-    
-    var token = localStorage.getItem('token');
+	if(!window.cordova){
+		//웹접근일때 페이스북 모듈 초기화.
 	
-	if(window.cordova){
-		if(!token){
-			localStorage.setItem('token',device.uuid+makeid());
-			var httpOption = {headers:{'Content-Type':"application/x-www-form-urlencoded"}};
-			var httpRequest  = {token:localStorage.getItem('token')};
-			
-			$http.post("http://sape.kr/member/join",$httpParamSerializerJQLike(httpRequest),httpOption).then(function(result){
-				//console.log(result.data);
-			});	
-		}
-// 		
-// 		facebookConnectPlugin.login(["public_profile"], function(userData){
-// 			console.log(userData );
-// 		},
-// 		  function loginError (error) {
-// 		    console.error(error)
-// 		  }
-// 		);
-
-		facebookConnectPlugin.getLoginStatus(function(response){
-			console.log(response.status)
-			if (response.status === 'connected') {
-				// the user is logged in and has authenticated your
-				// app, and response.authResponse supplies
-				// the user's ID, a valid access token, a signed
-				// request, and the time the access token 
-				// and signed request each expire
-				var uid = response.authResponse.userID;
-				var accessToken = response.authResponse.accessToken;
-			} else if (response.status === 'not_authorized') {
-				// the user is logged in to Facebook, 
-				// but has not authenticated your app
-			} else {
-				// the user isn't logged in to Facebook.
-			}
-		}, function(error){
-			//실패
-			console.log(error);
-		})
 		
-	}else{
-		if(!token){
-			localStorage.setItem('token','abcdefg-ABCDEFG-1234567-7654321'+makeid());
-			var httpOption = {headers:{'Content-Type':"application/x-www-form-urlencoded"}};
-			var httpRequest  = {token:localStorage.getItem('token')};
-			
-			$http.post("http://sape.kr/member/join",$httpParamSerializerJQLike(httpRequest),httpOption).then(function(result){
-				//console.log(result.data);
-			});
-		}
 		window.fbAsyncInit = function() {
-		    FB.init({
-		      appId      : '902315989804229',
-		      xfbml      : true,
-		      version    : 'v2.4'
-		    });
-		    
-		  };
+			var host = window.location.host;
+			var fbAppId = (host=="192.168.0.11:8100")?"912608968774931":"902315989804229";
+			FB.init({
+				appId	: fbAppId,
+				xfbml	: true,
+				version	: 'v2.4'
+			});    
+		};
 		
-		  (function(d, s, id){
-		     var js, fjs = d.getElementsByTagName(s)[0];
-		     if (d.getElementById(id)) {return;}
-		     js = d.createElement(s); js.id = id;
-		     js.src = "//connect.facebook.net/ko_KR/sdk.js";
-		     fjs.parentNode.insertBefore(js, fjs);
-		   }(document, 'script', 'facebook-jssdk'));
+		(function(d, s, id){
+		    var js, fjs = d.getElementsByTagName(s)[0];
+		    if (d.getElementById(id)) {return;}
+		    js = d.createElement(s); js.id = id;
+		    js.src = "//connect.facebook.net/ko_KR/sdk.js";
+		    fjs.parentNode.insertBefore(js, fjs);
+		}(document, 'script', 'facebook-jssdk'));
 	}
-	
-	
-	
-	
-	
-	
-		
-	
-	function makeid(){
-	    var text = "";
-	    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-	
-	    for( var i=0; i < 5; i++ )
-	        text += possible.charAt(Math.floor(Math.random() * possible.length));
-	
-	    return text;
+	var token = localStorage.getItem('token');
+	if(token){
+		//토큰이 있으면 해더에 토큰 지정
+		$http.defaults.headers.common.token = token;
 	}
 	
   });
@@ -154,21 +94,21 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
 			}
 		}
 	})
-	.state('tab.chats', {
-		url: '/chats',
+	.state('tab.friend', {
+		url: '/friend',
 		views: {
-			'tab-chats': {
-				templateUrl: 'templates/tab-chats.html',
-				controller: 'ChatsCtrl'
+			'tab-friend': {
+				templateUrl: 'templates/tab-friend.html',
+				controller: 'friendCtrl'
 			}
 		}
 	})
-	.state('tab.chat-detail', {
-		url: '/chats/:chatId',
+	.state('tab.friend-detail', {
+		url: '/friend/:friendIdx',
 			views: {
-			'tab-chats': {
-				templateUrl: 'templates/chat-detail.html',
-				controller: 'ChatDetailCtrl'
+			'tab-friend': {
+				templateUrl: 'templates/friend-detail.html',
+				controller: 'friendDetailCtrl'
 			}
 		}
 	})
@@ -187,8 +127,13 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
 		controller: 'Login'
 	});
 
-  // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/login');
+	// if none of the above states are matched, use this as the fallback
+	var token = localStorage.getItem('token');
+	if(!token){
+		$urlRouterProvider.otherwise('/login');
+	}else{
+		$urlRouterProvider.otherwise('/tab/dash');
+	}
   
   
   

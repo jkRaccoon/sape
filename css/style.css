@@ -70,3 +70,65 @@
 }
 
 .icon-sape_logo:before { content: '\e801'; font-size:90% } /* '?' */
+
+.routeDivider {
+	padding: 0 5px;
+	height:20px;
+	line-height: 24px;
+	vertical-align: middle;
+}
+.sapeLogo {
+	color: #ffcc00;
+	
+	vertical-align: middle;
+}
+
+.sapeLogo i:before{
+	font-size: 150%;
+	background: linear-gradient(45deg, #f9a717 , #ffcc00 );
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+
+}
+
+#route{}
+#route	.list { margin: 0}
+	.routeItem{border-bottom:5px solid #f3f3f3}
+		.routeLike{margin:7px 0 0 4%; float:left;width:15%}
+		.routeLike > p {font-size: 0.7em;text-align: center}
+			.routeLikeCircle{  width:30px; height:30px;border: 3px solid #cccccc;border-radius: 15px; text-align: center; line-height: 27px; vertical-align: middle; color:#cccccc; margin: 0 auto}	
+			.routeLikeIco:before{ font-size: 100%; }
+		.routeInfo{float:left; width:81%;}
+		.routeItemUpInfo{overflow: hidden; clear: both}
+			.routeItemUpInfoLeft{float:left; width: 11%; text-align: center}
+			.routeItemUpInfoMiddle{float:left; width:78%; text-align: center}
+			.routeItemUpInfoRight{float:left; width: 11%; text-align: center}
+		.routeItemDownInfo{}
+			.routeItemDownInfoLeft{float:left; width: 11%; text-align: center}
+			.routeItemDownInfoMiddle{float:left; width: 78%; text-align: center}
+			.routeItemDownInfoRight{float:left; width: 11%; text-align: center}
+		.routeItemGraph{overflow: hidden; clear: both}
+			.routeItemGraphLeftIco{float:left; width: 11%;background: url(../img/dashGraphBg.png) no-repeat ; background-size: 50% 100%; background-position: right center; text-align: center}
+			.routeItemGraphLeftIco > img {width:12px; display: block; margin:0 auto}
+			.routeItemGraphLine{float:left; width: 78%;height:12px; background: url(../img/dashGraphBg.png)no-repeat;background-size: 100% 100%;}
+			.routeItemGraphRightIco{float:left; width: 11%;background: url(../img/dashGraphBg.png)no-repeat ; background-size: 50% 100%; text-align: center}
+			.routeItemGraphRightIco > img {width:12px; display: block; margin:0 auto }
+		.routeItemFoot{overflow: hidden; clear: both}
+			.routeItemFootLeft{float:left;width: 11%; text-align: center; color:#cccccc}
+			.routeItemFootMiddle{float:left;width: 78%;height:12px;}
+			.routeItemFootRight{float:left;width: 11%; text-align: center; color:#cccccc}
+
+#courseList{ }	
+	.CourseMain{transition: 1s; }
+	.CourseMain.reverse{ transform: rotateY(360deg) }	
+	.CourseMainImage{height:150px; width:100%; text-align: center}			
+	.CourseMainImage > img {height:100%; }	
+	.courseListItem{width:100%; overflow: hidden; border-bottom: 3px solid #f3f3f3; }	
+		.coursListItemInfoWrap{width:76%; float:left;padding: 17px  10px}
+		.courseListItemBtnWrap{width:24%; height:75px; float:left; background: #66cccc; text-align: center; vertical-align: middle; line-height: 70px}
+	.courseAddBtn{ border: 0; background-color: #99cc33; width: 50px; height: 50px; position: fixed; bottom:10%; right:5%; border-radius: 25px; font-size: xx-large; color: white}
+	
+#rideDetail 
+	.riderlist{clear:both; overflow: hidden}
+	.riderCard{float:left}
+	.riderCard > img{width: 50px; height:100%; padding:5px}

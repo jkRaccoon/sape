@@ -1,30 +1,8 @@
 angular.module('starter.controllers', [])
 
 //라이딩 리스트
-.controller('RideList', function($scope, $ionicLoading, $compile, $stateParams, $ionicPopup,Course) {
+.controller('RideList', function($scope, $ionicLoading, $compile, $stateParams, $ionicPopup,$state,Course) {
 	
-	function initialize() {
-		var container = document.getElementById('map'); //지도를 담을 영역의 DOM 레퍼런스
-		var options = { //지도를 생성할 때 필요한 기본 옵션
-			center: new daum.maps.LatLng(37.51186511, 126.99830338718), //지도의 중심좌표.
-			level: 3, //지도의 레벨(확대, 축소 정도)
-			
-		};
-		
-		var map = new daum.maps.Map(container, options); //지도 생성 및 객체 리턴
-		
-		map.addOverlayMapTypeId(daum.maps.MapTypeId.BICYCLE);
-		
-		daum.maps.event.addListener(map, 'click', function(mouseEvent) {
-		    var latlng = mouseEvent.latLng;
-		   
-		});
-
-		$scope.map = map;
-		
-		
-    }
-    
    
     $scope.courseId = $stateParams.courseId; //코스아이디
     
@@ -56,74 +34,30 @@ angular.module('starter.controllers', [])
 			        		  }
 			        	  }
 			          }
-			          ]
-		  });
+			        ]
+		});
 		myPopup.then(function(res) {
 			
 		});
 	
 	};
-	if(!$scope.map) {
-		initialize();
+	
+	$scope.enterRideRoom = function(courseId , courseDetailId){
+	
+		$state.go('tab.course-detail',{courseId:courseId , courseDetailId:courseDetailId});
 	}
 	
+	$scope.changeDirection = function(){
+		$scope.reverse = ($scope.reverse == true)?false:true;
+		
+	}
 	
-	Course.routeLiveList($scope.courseId).success(function(result){
+	Course.routeRoomList($scope.courseId).success(function(result){
+		
 		$scope.courseList = result;
 	});
 	
 	
-	Course.route($scope.courseId).success(function(result){
-		
-		var linePath = new Array();
-		var bounds = new daum.maps.LatLngBounds();
-		var point = null;
-		
-		for(var i in result){
-			point = new daum.maps.LatLng(result[i]["lat"], result[i]["lng"]);
-			linePath.push(point);
-			bounds.extend(point);
-		}
-		
-		// 지도에 표시할 선을 생성합니다
-		var polyline = new daum.maps.Polyline({
-		    path: linePath, // 선을 구성하는 좌표배열 입니다
-		    strokeWeight: 5, // 선의 두께 입니다
-		    strokeColor: '#0000FF', // 선의 색깔입니다
-		    strokeOpacity: 1, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
-		    strokeStyle: 'solid' // 선의 스타일입니다
-		});
-		
-		
-		
-		var startCircle = new daum.maps.Circle({
-		    center : linePath[0],  // 원의 중심좌표 입니다 
-		    radius: 50, // 미터 단위의 원의 반지름입니다 
-		    strokeWeight: 2, // 선의 두께입니다 
-		    strokeColor: '#75B8FA', // 선의 색깔입니다
-		    strokeOpacity: 1, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
-		    strokeStyle: 'solid', // 선의 스타일 입니다
-		    fillColor: '#CFE7FF', // 채우기 색깔입니다
-		    fillOpacity: 0.7  // 채우기 불투명도 입니다   
-		});
-		
-		startCircle.setMap($scope.map); 
-		
-		var endCircle = new daum.maps.Circle({
-		    center : linePath[linePath.length-1],  // 원의 중심좌표 입니다 
-		    radius: 50, // 미터 단위의 원의 반지름입니다 
-		    strokeWeight: 2, // 선의 두께입니다 
-		    strokeColor: '#FA75B8', // 선의 색깔입니다
-		    strokeOpacity: 1, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
-		    strokeStyle: 'solid', // 선의 스타일 입니다
-		    fillColor: '#FFCFE7', // 채우기 색깔입니다
-		    fillOpacity: 0.7  // 채우기 불투명도 입니다   
-		});
-		endCircle.setMap($scope.map); 
-		polyline.setMap($scope.map); 
-		$scope.map.setBounds(bounds,10,10,10,10);
-
-	});
 	
 	
 
@@ -153,12 +87,14 @@ angular.module('starter.controllers', [])
 	
 	//코스정보 표시.
 	
-	ride.route($scope.courseId).success(function(result){
+	ride.route($scope.courseDetailId).success(function(result){
 		
 		var linePath = new Array();
-		for(var i in result){
-			linePath.push(new daum.maps.LatLng(result[i]["lat"], result[i]["lng"]));
+		for(var i in result.path){
+			linePath.push(new daum.maps.LatLng(result.path[i]["lat"], result.path[i]["lng"]));
 		}
+		
+		
 		// 지도에 표시할 선을 생성합니다
 		var polyline = new daum.maps.Polyline({
 		    path: linePath, // 선을 구성하는 좌표배열 입니다
@@ -221,8 +157,11 @@ angular.module('starter.controllers', [])
 		ride.post(position,$scope.courseDetailId);
 	}
 	
+	//라이더 리스트
+	
 	$scope.displayTimer = function(){
 		ride.get($scope.courseDetailId).then(function(result){
+			$scope.riderListResult = result.data;
 			for(var i in $scope.riderList){
 				$scope.riderList[i].setMap(null);
 			}
@@ -230,12 +169,12 @@ angular.module('starter.controllers', [])
 			
 			for(var i in result.data){
 				tmpPosition = new daum.maps.LatLng(result.data[i].latitude, result.data[i].longitude);
-				$scope.riderList[result.data[i].idx] = new daum.maps.CustomOverlay({
+				$scope.riderList.push(new daum.maps.CustomOverlay({
 				    map: $scope.detailMap,
 				    position: tmpPosition,
 				    content: "<i class=\"ion-android-bicycle assertive dissolveOut5s icon-large\" style=\"font-size:200%\"></i>",
 				    yAnchor: 0.5 
-				});
+				}));
 								
 			}
 			//console.log($scope.riderList)
@@ -266,7 +205,7 @@ angular.module('starter.controllers', [])
 
 .controller('DashCtrl', function($scope,$http,$httpParamSerializerJQLike,Course,myInfo) {
 	Course.list().success(function(result){
-		console.log(result)
+		//console.log(result)
 		$scope.routeList = result;
 		
 	});
@@ -278,15 +217,25 @@ angular.module('starter.controllers', [])
 	
 })
 
-.controller('ChatsCtrl', function($scope, Chats) {
-	$scope.chats = Chats.all();
+.controller('friendCtrl', function($scope, friend) {
+	friend.list().success(function(result){
+		//console.log(result)
+		$scope.friendlist = result;
+		
+	});
+	
+	console.log($scope.friendlist)
 	$scope.remove = function(chat) {
-		Chats.remove(chat);
+		friendlist.remove(chat);
 	};
 })
 
-.controller('ChatDetailCtrl', function($scope, $stateParams, Chats) {
-	$scope.chat = Chats.get($stateParams.chatId);
+.controller('friendDetailCtrl', function($scope, $stateParams, friend) {
+	friend.get($stateParams.friendIdx).success(function(result){
+		//console.log(result)
+		$scope.friend = result;
+		
+	});;
 })
 
 .controller('AccountCtrl', function($scope,$state) {
@@ -296,57 +245,69 @@ angular.module('starter.controllers', [])
 	};
 	
 	$scope.logout = function(){
+		localStorage.removeItem('token');
 		$state.go('login');
 	};
 })
 
-.controller('Login', function($scope,$state) {
+.controller('Login', function($scope,$state , $http,login) {
 	
-	
-	
+	//테스트코드-인증패스
+	//$state.go('tab.dash');
 	$scope.LoginWithFacebook = function(){
 		if(window.cordova){
 			facebookConnectPlugin.login(["public_profile"], function(loginData){
-				
-	 			$scope.LoginOkFacebook(loginData );
-	 		},
-	 		  function loginError (error) {
-	 		    console.error(error)
-	 		  }
-	 		);
+				$scope.LoginOkFacebook(loginData.authResponse.accessToken , loginData.authResponse.userID );
+			},function loginError (error) {
+				console.error(error)
+			});
 		}else{
 			FB.login(function(loginData) {
-				console.log(loginData)
 			    if (loginData.authResponse) {
-				    
-				    $scope.LoginOkFacebook(loginData );
+				    $scope.LoginOkFacebook(loginData.authResponse.accessToken , loginData.authResponse.userID );
 			    } else {
-			     console.log('User cancelled login or did not fully authorize.');
+			    	alert('오류가 발생하여 더이상 진행할수 없습니다.')
 			    }
 			},{
-		 		  scope: 'public_profile,user_friends',
-		 		  return_scopes: true
-	 		  }
-	 		);
+				scope: 'public_profile,user_friends',
+				return_scopes: true
+			});
+		}
+	}
+	
+	$scope.LoginOkFacebook = function(fbtoken, fbid){
+		
+		var token = createToken();
+		localStorage.setItem('token',token);
+		$http.defaults.headers.common.token = token; //헤더 토큰 설정
+		login.fbLogin(fbtoken, fbid).then(function(response){
+			$state.go('tab.dash');
+		});
+		
+		function createToken(){
+			var freFix;
+			if(window.cordova){
+				freFix = device.uuid;
+			}else{
+				freFix = makeid(10);
+			}
+			return freFix+makeid(5);
+			
+		}
+		
+		function makeid(keyLength){
+		    var text = "";
+		    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+		
+		    for( var i=0; i < keyLength; i++ )
+		        text += possible.charAt(Math.floor(Math.random() * possible.length));
+		
+		    return text;
 		}
 		
 	}
 	
-	$scope.LoginOkFacebook = function(loginData){
-		
-		if(window.cordova){
-			$state.go('tab.dash');
-		}else{
-			FB.api("/me",{"fields":"picture,name,cover"}, function(response){
-	 			console.log(response);
-	 			$state.go('tab.dash');
-	 		});
-
-		}
-		
-		
-		
-	}
+	
 })
 .directive('hideTabs', function($rootScope) {
   return {

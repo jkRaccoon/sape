@@ -1,13 +1,54 @@
-<ion-view view-title="SAPE" >
-  <ion-content >
-    <div class="list " ng-repeat="routeList in routeList">
-      <div class="item item-divider">{{routeList.categoryName}} </div>
-      <a class="item" ng-repeat="route in routeList.List" href="#/tab/course/{{route.idx}}">
-        <div>
-        	{{route.distance}}km - 약 {{route.time}}분
-        </div>
-      </a>
-    </div>
+
+<ion-view  >
+	<ion-nav-title class="sapeLogo">
+     	<i class="icon icon-sape_logo"></i> 같이 달려요!
+    </ion-nav-title>
+	<ion-content id="route" >
+	    <div class="list " ng-repeat="routeList in routeList">
+	      <div class="item item-divider item-dark routeDivider ">{{routeList.categoryName}} 코스</div>
+	      <a class="item routeItem" ng-repeat="route in routeList.List" href="#/tab/course/{{route.idx}}">
+	        <div class="routeInfo">
+		        <div class="routeItemUpInfo " >
+		        	<div class="routeItemUpInfoLeft">
+			        	IN
+		        	</div>
+		        	<div class="routeItemUpInfoMiddle balanced">
+			        	<i class="icon icon-sape_logo dark"></i> {{route.distance}}km
+		        	</div>
+		        	<div class="routeItemUpInfoRight">
+			        	OUT
+		        	</div>
+		        </div>
+		        <div  class="routeItemGraph">
+			        <div class="routeItemGraphLeftIco"><img src="img/dashGraphIco.png"></div>
+			        <div class="routeItemGraphLine"></div>
+			        <div class="routeItemGraphRightIco"><img src="img/dashGraphIco.png"></div>
+		        </div>
+		        <div  class="routeItemDownInfo">
+			       
+			        <div class="routeItemDownInfoLeft">
+			        	{{route.in}}
+		        	</div>
+		        	<div class="routeItemDownInfoMiddle calm">
+			        	<i class="icon ion-ios-stopwatch-outline dark"></i> {{route.time}}분
+		        	</div>
+		        	<div class="routeItemDownInfoRight">
+			        	{{route.out}}
+		        	</div>
+		        </div>
+		        <div  class="routeItemFoot">
+			        <div class="routeItemFootLeft">{{route.inCode}}</div>
+				    <div class="routeItemFootMiddle"></div>
+				    <div class="routeItemFootRight">{{route.outCode}}</div>   
+		        </div>
+	        	
+	        </div>
+	        <div class="routeLike">
+		        <div class="routeLikeCircle" ><i class="icon ion-heart routeLikeIco"></i></div>
+		        <p>{{route.likeCount}} Loves</p>
+	        </div>
+	      </a>
+	    </div>
    
-  </ion-content>
+	</ion-content>
 </ion-view>
